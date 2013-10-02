@@ -1,0 +1,6 @@
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\bin\Debug\mailinblue.dll
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\bin\Debug\mailinblue.pdb
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\obj\Debug\mailinblue.dll
+C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\mailinblue\obj\Debug\mailinblue.pdb

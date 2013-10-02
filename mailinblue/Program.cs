@@ -6,27 +6,36 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+	using System;
     using System.IO;
     using System.Net;
     using System.Security.Cryptography;
     using System.Text;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System.Collections.Generic;
+    using System.Dynamic;
 
 namespace mailinblue
 {
 	public class API
 	{
-		    static string ByteToString(byte[] buff)
-    {
-        string sbinary = "";
-        for (int i = 0; i < buff.Length; i++)
-            sbinary += buff[i].ToString("X2"); /* hex format */
-        return sbinary;
-    }    
-		public void auth_call(string accessId,string secretId, string method,string content) {
-			string base_url = "http://api.mailinblue.com/v1.0/";
+		public string base_url = "https://api.mailinblue.com/v1.0/";
+		public string accessId = "";
+		public string secretId = "";
+		public API(string accessId, string secretId) {
+			this.accessId = accessId;
+			this.secretId = secretId; 
+		}
+		static string ByteToString(byte[] buff) {
+	        string sbinary = "";
+	        for (int i = 0; i < buff.Length; i++)
+	            sbinary += buff[i].ToString("X2"); /* hex format */
+	        return sbinary;
+	    }    
+		private dynamic auth_call(string resource, string method,string content) {
 			// Create the url
-			string url = base_url + "campaign";
+			string url = base_url + resource;
 			// Create request
 			HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
 			// Set method
@@ -49,7 +58,6 @@ namespace mailinblue
     			content_md5 = sb.ToString().ToLower();
             }
             string canonicalString = method+"\n" + content_md5 + "\n"+ content_type +"\n" + httpDate + "\n" + url;
-            //Console.WriteLine(canonicalString);
 			HMACSHA1 signature = new HMACSHA1(System.Text.Encoding.ASCII.GetBytes(secretId));
 			signature.Initialize();
             // Get the actual signature
@@ -69,18 +77,33 @@ namespace mailinblue
                     ms.Write(buffer, 0, nRead);
                 } while (nRead > 0);
                 // convert read bytes into string
-                ASCIIEncoding encoding = new ASCIIEncoding();
-                string responseString = encoding.GetString(ms.ToArray());
-                System.Console.Write(responseString);
-	}
-	}
-	class Program
-	{
-		public static void Main(string[] args)
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string responseString = encoding.GetString(ms.ToArray());
+            // Return a dynamic object
+            return JObject.Parse(responseString);
+		}
+		private dynamic get_request(string resource,string content) 
 		{
-			API test = new API();
-			test.auth_call("<Access ID>","<Secret ID>","GET","");
-			Console.ReadKey(true);
+			return auth_call(resource,"GET",content);
+		}
+		private dynamic post_request(string resource,string content) 
+		{
+			return auth_call(resource,"POST",content);
+		}
+		private dynamic delete_request(string resource,string content) 
+		{
+			return auth_call(resource,"DELETE",content);
+		}
+		private dynamic put_request(string resource,string content) 
+		{
+			return auth_call(resource,"PUT",content);
+		}
+		public dynamic create_user()
+		{
+			dynamic content = new ExpandoObject();
+			content.test = "hi";
+			return post_request("user",JsonConvert.SerializeObject(content));
 		}
 	}
+	
 }
