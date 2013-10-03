@@ -15,7 +15,8 @@ class Program
 	{
 		public static void Main(string[] args)
 		{
-			API test = new mailinblue.API("<Access ID>","<Secret ID>");
+			API test = new mailinblue.API("<access key>","<secret key>");
+			Console.Write(test.get_campaigns());
 			Console.ReadKey(true);
 		}
 	}
