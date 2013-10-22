@@ -109,7 +109,7 @@ namespace mailinblue
 		public dynamic send_sms(string text,string tag,string web_url,string sms_from,string sms_to)
 		{
 			dynamic content = new ExpandoObject();
-			content.text=text;content.tag=tag;content.web_url=web_url;content.sms_from=sms_from;content.sms_to=sms_to;
+			content.text=text;content.tag=tag;content.web_url=web_url;content.from=sms_from;content.to=sms_to;
 			return post_request("sms",JsonConvert.SerializeObject(content));
 		}
 		public dynamic get_campaigns()
