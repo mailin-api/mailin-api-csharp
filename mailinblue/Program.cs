@@ -213,7 +213,7 @@ namespace mailinblue
 		public dynamic send_email(Dictionary<string, string> cc,string text,Dictionary<string, string> bcc,Dictionary<string, string> replyto,string html,Dictionary<string, string> email_to,List<int> attachment,List<int> email_from,string subject)
 		{
 			dynamic content = new ExpandoObject();
-			content.cc=cc;content.text=text;content.bcc=bcc;content.replyto=replyto;content.html=html;content.email_to=email_to;content.attachment=attachment;content.email_from=email_from;content.subject=subject;
+			content.cc=cc;content.text=text;content.bcc=bcc;content.replyto=replyto;content.html=html;content.to=email_to;content.attachment=attachment;content.from=email_from;content.subject=subject;
 			return post_request("email",JsonConvert.SerializeObject(content));
 		}
 		public dynamic get_webhooks()
