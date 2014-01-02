@@ -75,11 +75,15 @@ namespace mailinblue
             //Console.Write(canonicalString);
             //Console.Write(encodedCanonical);
 
-            using (System.IO.Stream s = request.GetRequestStream())
-            {
-                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
-                    sw.Write(content);
+            if (method == "POST") {
+                using (System.IO.Stream s = request.GetRequestStream())
+                {
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
+                        sw.Write(content);
+                }
             }
+            
+
 
 
             HttpWebResponse response;

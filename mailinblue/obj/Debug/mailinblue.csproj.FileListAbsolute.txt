@@ -10,3 +10,9 @@ C:\Users\Sandeep\Downloads\mailin-api-csharp-master\mailin-api-csharp-master\mai
 C:\Users\Sandeep\Downloads\mailin-api-csharp-master\mailin-api-csharp-master\mailinblue\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Sandeep\Downloads\mailin-api-csharp-master\mailin-api-csharp-master\mailinblue\obj\Debug\mailinblue.dll
 C:\Users\Sandeep\Downloads\mailin-api-csharp-master\mailin-api-csharp-master\mailinblue\obj\Debug\mailinblue.pdb
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\bin\Debug\mailinblue.dll
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\bin\Debug\mailinblue.pdb
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\obj\Debug\mailinblue.dll
+C:\Users\Sandeep\Downloads\mailin-api-csharp-master (1)\mailin-api-csharp-master\mailinblue\obj\Debug\mailinblue.pdb
