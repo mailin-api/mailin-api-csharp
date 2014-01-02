@@ -33,58 +33,74 @@ namespace mailinblue
 				sbinary += buff[i].ToString("X2"); /* hex format */
 			return sbinary;
 		}
-		private dynamic auth_call(string resource, string method,string content) {
-			// Create the url
-			string url = base_url + resource;
-			// Create request
-			HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-			// Set method
-			request.Method = method;
-			WebHeaderCollection headers = (request as HttpWebRequest).Headers;
-			string httpDate = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss ") + "GMT";
-			Encoding ae = new UTF8Encoding();
-			string content_type = "application/json";
-			string content_md5 = "";
-			if(!content.Equals("")) {
-				// Need to verify MD5
-				MD5 md5 = System.Security.Cryptography.MD5.Create();
-				byte[] hash = md5.ComputeHash(ae.GetBytes(content));
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < hash.Length; i++)
-				{
-					sb.Append(hash[i].ToString("X2"));
-				}
-				content_md5 = sb.ToString().ToLower();
-			}
-			string canonicalString = method+"\n" + content_md5 + "\n"+ content_type +"\n" + httpDate + "\n" + url;
-			HMACSHA1 signature = new HMACSHA1(System.Text.Encoding.ASCII.GetBytes(secretId));
-			signature.Initialize();
-			// Get the actual signature
-			byte[] moreBytes = signature.ComputeHash(ae.GetBytes(canonicalString));
-			string encodedCanonical = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(ByteToString(moreBytes).ToLower()));
-			request.ContentType = content_type;
-			request.Headers.Add("X-mailin-date", httpDate);
-			request.Headers.Add("Authorization", accessId + ":" + encodedCanonical);
-			//Console.Write(canonicalString);
-			//Console.Write(encodedCanonical);
-			HttpWebResponse response;
-			response = request.GetResponse() as HttpWebResponse;
-			// read the response stream and put it into a byte array
-			Stream stream =  response.GetResponseStream() as Stream;
-			byte[] buffer = new byte[32 * 1024];
-			int nRead =0;
-			MemoryStream ms = new MemoryStream();
-			do
-			{
-				nRead = stream.Read(buffer, 0, buffer.Length);
-				ms.Write(buffer, 0, nRead);
-			} while (nRead > 0);
-			// convert read bytes into string
-			ASCIIEncoding encoding = new ASCIIEncoding();
-			string responseString = encoding.GetString(ms.ToArray());
-			// Return a dynamic object
-			return JObject.Parse(responseString);
-		}
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+        private dynamic auth_call(string resource, string method,string content) {
+            string url = base_url + resource;
+            // Create request
+
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            // Set method
+            request.Method = method;
+            WebHeaderCollection headers = (request as HttpWebRequest).Headers;
+            string httpDate = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss ") + "GMT";
+            Encoding ae = new UTF8Encoding();
+            string content_type = "application/json";
+            string content_md5 = "";
+            if (!content.Equals(""))
+            {
+                // Need to verify MD5
+                MD5 md5 = System.Security.Cryptography.MD5.Create();
+                byte[] hash = md5.ComputeHash(ae.GetBytes(content));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    sb.Append(hash[i].ToString("X2"));
+                }
+                content_md5 = sb.ToString().ToLower();
+            }
+            string canonicalString = method + "\n" + content_md5 + "\n" + content_type + "\n" + httpDate + "\n" + url;
+            HMACSHA1 signature = new HMACSHA1(System.Text.Encoding.ASCII.GetBytes(secretId));
+            signature.Initialize();
+            // Get the actual signature
+            byte[] moreBytes = signature.ComputeHash(ae.GetBytes(canonicalString));
+            string encodedCanonical = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(ByteToString(moreBytes).ToLower()));
+            request.ContentType = content_type;
+            request.Headers.Add("X-mailin-date", httpDate);
+            request.Headers.Add("Authorization", accessId + ":" + encodedCanonical);
+            //Console.Write(canonicalString);
+            //Console.Write(encodedCanonical);
+
+            using (System.IO.Stream s = request.GetRequestStream())
+            {
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
+                    sw.Write(content);
+            }
+
+
+            HttpWebResponse response;
+            response = request.GetResponse() as HttpWebResponse;
+            // read the response stream and put it into a byte array
+            Stream stream = response.GetResponseStream() as Stream;
+            byte[] buffer = new byte[32 * 1024];
+            int nRead = 0;
+            MemoryStream ms = new MemoryStream();
+            do
+            {
+                nRead = stream.Read(buffer, 0, buffer.Length);
+                ms.Write(buffer, 0, nRead);
+            } while (nRead > 0);
+            // convert read bytes into string
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string responseString = encoding.GetString(ms.ToArray());
+            // Return a dynamic object
+            return JObject.Parse(responseString);
+
+        }
 		private dynamic get_request(string resource,string content)
 		{
 			return auth_call(resource,"GET","");
