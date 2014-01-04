@@ -72,10 +72,8 @@ namespace mailinblue
             request.ContentType = content_type;
             request.Headers.Add("X-mailin-date", httpDate);
             request.Headers.Add("Authorization", accessId + ":" + encodedCanonical);
-            //Console.Write(canonicalString);
-            //Console.Write(encodedCanonical);
-
-            if (method == "POST") {
+            
+            if (method == "POST" || method == "PUT") {
                 using (System.IO.Stream s = request.GetRequestStream())
                 {
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
@@ -83,9 +81,6 @@ namespace mailinblue
                 }
             }
             
-
-
-
             HttpWebResponse response;
             response = request.GetResponse() as HttpWebResponse;
             // read the response stream and put it into a byte array
