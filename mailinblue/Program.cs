@@ -142,10 +142,10 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             return get_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email)
+        public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email;
+            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to;
             return post_request("campaign", JsonConvert.SerializeObject(content));
         }
         public dynamic delete_campaign(string id)
@@ -153,10 +153,10 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             return delete_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email)
+        public dynamic update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email;
+            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to;
             return put_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
         public dynamic campaign_report_email(string id, string lang, string email_subject, List<int> email_to, string email_content_type, string email_bcc, string email_cc, string email_body)
