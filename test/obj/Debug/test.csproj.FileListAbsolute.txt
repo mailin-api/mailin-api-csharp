@@ -6,3 +6,11 @@ C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\test\bin\Debug\maili
 C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\test\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\test\obj\Debug\test.exe
 C:\Users\Samsung\Documents\SharpDevelop Projects\mailinblue\test\obj\Debug\test.pdb
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\test.exe
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\test.pdb
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\mailinblue.dll
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\Newtonsoft.Json.dll
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\mailinblue.pdb
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\test.exe
+C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\test.pdb

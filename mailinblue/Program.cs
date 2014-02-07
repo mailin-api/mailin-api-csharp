@@ -224,7 +224,7 @@ namespace mailinblue
         public dynamic send_email(Dictionary<string, string> to, string subject, List<string> from, string html, string txt, Dictionary<string, string> cc, Dictionary<string, string> bcc, Dictionary<string, string> replyto, List<string> attachment, Dictionary<string, string> headers)
         {
             dynamic content = new ExpandoObject();
-            content.cc = cc; content.text = text; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from = from; content.subject = subject; content.headers = headers;
+            content.cc = cc; content.text = txt; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from = from; content.subject = subject; content.headers = headers;
             return post_request("email", JsonConvert.SerializeObject(content));
         }
         public dynamic get_webhooks()
@@ -284,7 +284,7 @@ namespace mailinblue
         public dynamic update_user(string id, Dictionary<string, string> attributes, int blacklisted, List<int> listid, List<int> listid_unlink)
         {
             dynamic content = new ExpandoObject();
-            content.attributes = attributes; content.blacklisted = blacklisted; content.listid = listid; crontent.listid_unlink = listid_unlink;
+            content.attributes = attributes; content.blacklisted = blacklisted; content.listid = listid; content.listid_unlink = listid_unlink;
             return put_request("user/" + id, JsonConvert.SerializeObject(content));
         }
         public dynamic import_users(string url, List<int> listids, string notify_url, string name)
