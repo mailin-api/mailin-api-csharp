@@ -207,7 +207,13 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             content.list_name = list_name; content.list_parent = list_parent;
             return put_request("list/" + id, JsonConvert.SerializeObject(content));
-        }
+        }    
+        public dynamic display_list_users(string listids, string page, string page_limit)
+        {
+            dynamic content = new ExpandoObject();
+            content.listids = listids; content.page = page; content.page_limit = page_limit;
+            return get_request("list/display", JsonConvert.SerializeObject(content));
+        }        
         public dynamic add_users_list(string id, List<int> users)
         {
             dynamic content = new ExpandoObject();
@@ -359,6 +365,12 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             content.start_date = start_date; content.end_date = end_date; content.email = email;
             return post_request("bounces", JsonConvert.SerializeObject(content));
+        }
+        public dynamic send_transactional_template(string id, string to, string cc, string bcc, string attr)
+        {
+            dynamic content = new ExpandoObject();
+            content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; 
+            return put_request("template/" + id, JsonConvert.SerializeObject(content));
         }
 
     }
