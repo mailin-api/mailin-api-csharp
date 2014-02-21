@@ -361,7 +361,7 @@ namespace mailinblue
             content.start_date = start_date; content.end_date = end_date; content.email = email;
             return post_request("bounces", JsonConvert.SerializeObject(content));
         }
-        public dynamic send_transactional_template(string id, string to, string cc, string bcc, string attr)
+        public dynamic send_transactional_template(string id, string to, string cc, string bcc, Dictionary<string, string> attr)
         {
             dynamic content = new ExpandoObject();
             content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; 
