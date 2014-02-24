@@ -208,11 +208,11 @@ namespace mailinblue
             content.list_name = list_name; content.list_parent = list_parent;
             return put_request("list/" + id, JsonConvert.SerializeObject(content));
         }    
-        public dynamic display_list_users(string listids, string page, string page_limit)
+        public dynamic display_list_users(List<int> listids, int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
             content.listids = listids; content.page = page; content.page_limit = page_limit;
-            return get_request("list/display", JsonConvert.SerializeObject(content));
+            return put_request("list/display", JsonConvert.SerializeObject(content));
         }        
         public dynamic add_users_list(string id, List<int> users)
         {
