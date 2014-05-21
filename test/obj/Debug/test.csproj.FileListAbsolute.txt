@@ -14,3 +14,11 @@ C:\Users\swati.singh\Desktop\mailin-api-csharp\test\bin\Debug\mailinblue.pdb
 C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\test.exe
 C:\Users\swati.singh\Desktop\mailin-api-csharp\test\obj\Debug\test.pdb
+C:\mailin-api-csharp\test\bin\Debug\test.exe
+C:\mailin-api-csharp\test\bin\Debug\test.pdb
+C:\mailin-api-csharp\test\bin\Debug\mailinblue.dll
+C:\mailin-api-csharp\test\bin\Debug\Newtonsoft.Json.dll
+C:\mailin-api-csharp\test\bin\Debug\mailinblue.pdb
+C:\mailin-api-csharp\test\obj\Debug\ResolveAssemblyReference.cache
+C:\mailin-api-csharp\test\obj\Debug\test.exe
+C:\mailin-api-csharp\test\obj\Debug\test.pdb

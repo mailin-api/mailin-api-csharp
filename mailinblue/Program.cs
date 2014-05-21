@@ -125,10 +125,10 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             return get_request("account", JsonConvert.SerializeObject(content));
         }
-        public dynamic send_sms(string text, string tag, string web_url, string sms_from, string sms_to)
+        public dynamic send_sms(string text, string tag, string web_url, string sms_from, string sms_to , string type)
         {
             dynamic content = new ExpandoObject();
-            content.text = text; content.tag = tag; content.web_url = web_url; content.from = sms_from; content.to = sms_to;
+            content.text = text; content.tag = tag; content.web_url = web_url; content.from = sms_from; content.to = sms_to; content.type = type;
             return post_request("sms", JsonConvert.SerializeObject(content));
         }
         public dynamic get_campaigns(string type)
