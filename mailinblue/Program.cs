@@ -368,6 +368,32 @@ namespace mailinblue
             return put_request("template/" + id, JsonConvert.SerializeObject(content));
         }
 
+        public dynamic campaign_share_link(List<int> campaignids)
+        {
+            dynamic content = new ExpandoObject();
+            content.camp_ids = campaignids;
+            return post_request("campaign/sharelink", JsonConvert.SerializeObject(content));
+        }
+        public dynamic get_child_account(Dictionary<string, string> ChildAuthKey) 
+        {
+            dynamic content = new ExpandoObject();
+            content.auth_key = JsonConvert.SerializeObject(ChildAuthKey);
+            return post_request("account/getchild", JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic add_remove_child_credits(String ChildAuthKey, Dictionary<string, int> addCredits, Dictionary<string, int> removeCredits)
+        {
+            dynamic content = new ExpandoObject();
+            content.auth_key = ChildAuthKey;
+            content.add_credit = addCredits;
+            content.rmv_credit = removeCredits;
+            return post_request("account/addrmvcredit", JsonConvert.SerializeObject(content));
+        }
+
+
+
+
+
     }
 
 }
