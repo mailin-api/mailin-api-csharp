@@ -390,9 +390,16 @@ namespace mailinblue
             return post_request("account/addrmvcredit", JsonConvert.SerializeObject(content));
         }
 
-
-
-
+        public dynamic update_child_account(String ChildAuthKey, String company_org , String First_name , String Last_name, String password)
+        {
+            dynamic content = new ExpandoObject();
+            content.auth_key = ChildAuthKey;
+            content.company_org = company_org;
+            content.first_name = First_name;
+            content.last_name = Last_name;
+            content.password = password;
+            return put_request("account", JsonConvert.SerializeObject(content));
+        }
 
     }
 
