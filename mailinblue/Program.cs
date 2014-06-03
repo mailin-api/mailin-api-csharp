@@ -288,6 +288,18 @@ namespace mailinblue
             content.attributes = attributes; content.blacklisted = blacklisted; content.listid = listid; content.listid_unlink = listid_unlink;
             return put_request("user/" + id, JsonConvert.SerializeObject(content));
         }
+
+        public dynamic create_update_user(String email,Dictionary<string, string> attributes,int blacklisted,List<int> listid,List<int> listid_unlink)
+        {
+            dynamic content = new ExpandoObject();
+            content.email = email;
+            content.attributes = attributes; 
+            content.blacklisted = blacklisted; 
+            content.listid = listid; 
+            content.listid_unlink = listid_unlink;
+            return put_request("user/createdituser", JsonConvert.SerializeObject(content));
+        }
+
         public dynamic import_users(string url, List<int> listids, string notify_url, string name)
         {
             dynamic content = new ExpandoObject();
@@ -400,6 +412,58 @@ namespace mailinblue
             content.password = password;
             return put_request("account", JsonConvert.SerializeObject(content));
         }
+
+        public dynamic delete_child_account(String ChildAuthKey)
+        {
+            dynamic content = new ExpandoObject();
+            return delete_request("account/"+ChildAuthKey, JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic create_child_account(String email,String password,String company_org, String First_name, String Last_name,Dictionary<string,int> credits)
+        {
+            dynamic content = new ExpandoObject();
+            content.child_email = email;
+            content.password = password;
+            content.company_org = company_org;
+            content.first_name = First_name;
+            content.last_name = Last_name;
+            content.credits = credits;
+            return post_request("account", JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic create_sender(String name, String email, List<string> ip_domain)
+        {
+            dynamic content = new ExpandoObject();
+            content.name = name;
+            content.email = email;
+            content.ip_domain = ip_domain;
+            return post_request("advanced", JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic delete_sender(int id)
+        {
+            dynamic content = new ExpandoObject();
+            return delete_request("advanced/"+id, JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic update_sender(int id,String name, String email, List<string> ip_domain)
+        {
+            dynamic content = new ExpandoObject();
+            content.name = name;
+            content.email = email;
+            content.ip_domain = ip_domain;
+            return put_request("advanced/" + id, JsonConvert.SerializeObject(content));
+        }
+
+        public dynamic get_senders(String option) 
+        {
+            dynamic content = new ExpandoObject();
+            return get_request("advanced/index/option/"+option, JsonConvert.SerializeObject(content));
+        }
+
+
+
+
 
     }
 
