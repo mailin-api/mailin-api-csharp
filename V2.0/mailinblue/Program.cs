@@ -1,13 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Prasant
- * Created Date: 30-09-2013
- * Modified Date: 30-09-2014
- * Time: 22:11
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
