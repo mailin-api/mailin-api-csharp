@@ -1,10 +1,8 @@
 # Sendinblue C# library
 
-This is the Sendinblue C# library.It implements the various exposed APIs that you can read more about on https://apidocs.sendinblue.com.
+This is the official Sendinblue C# library. It implements the various exposed APIs that you can read more about on https://apidocs.sendinblue.com.
 
 # Requirement
-
-This is the official SendinBlue API C# library.
 
  * The primary dependency is Newtonsoft's JSON .NET library. 
  * This is compatible with .NET 4.0 and above due to the usage of dynamic objects. 
