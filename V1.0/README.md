@@ -1,4 +1,4 @@
-# Sendinblue C# library
+# Sendinblue C# Library
 
 This is the official Sendinblue C# library. It implements the various exposed APIs that you can read more about on https://apidocs.sendinblue.com.
 

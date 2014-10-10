@@ -1,4 +1,4 @@
-# Sendinblue C# library
+# Sendinblue C# Library
 
 This is the official Sendinblue C# library. It implements the various exposed APIs that you can read more about on https://apidocs.sendinblue.com.
 
@@ -15,7 +15,7 @@ This is the official Sendinblue C# library. It implements the various exposed AP
 
 ## Available functions
 
-List of API calls that you can make. Please do note that the order of parameters are important.
+List of API calls that you can make, you can click to read more about it. Please do note that the order of parameters are important.
 
 ### Campaign calls
 
