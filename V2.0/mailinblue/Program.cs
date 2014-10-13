@@ -23,11 +23,13 @@ namespace mailinblue
         {
             Stream stream = new MemoryStream();
             string url = base_url + resource;
+            string content_type = "application/json";
             // Create request
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             // Set method
             request.Method = method;
+            request.ContentType = content_type;
             request.Headers.Add("api-key", accessId);
 
             if (method == "POST" || method == "PUT") {
