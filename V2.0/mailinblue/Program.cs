@@ -92,17 +92,17 @@ namespace mailinblue
             content.text = text; content.tag = tag; content.web_url = web_url; content.from = from_name; content.to = to; content.type = type;
             return post_request("sms", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_campaigns(string type, string status, int page, int page_limit)
+        public dynamic get_campaigns_v2(string type, string status, int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
             content.type = type; content.status = status; content.page = page; content.page_limit = page_limit;
             String url = "type/" + type + "/status/" + status + "/page/" + page + "/page_limit/" + page_limit;
-            return get_request("campaign/" + url ,"");
+            return get_request("campaign/detailsv2/" + url ,"");
         }
-        public dynamic get_campaign(int id)
+        public dynamic get_campaign_v2(int id)
         {
             dynamic content = new ExpandoObject();
-            return get_request("campaign/" + id, JsonConvert.SerializeObject(content));
+            return get_request("campaign/" + id + "/detailsv2/", JsonConvert.SerializeObject(content));
         }
         public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list)
         {
@@ -344,17 +344,17 @@ namespace mailinblue
             content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; 
             return put_request("template/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic campaign_share_link(List<int> campaignids)
+        public dynamic share_campaign(List<int> campaignids)
         {
             dynamic content = new ExpandoObject();
             content.camp_ids = campaignids;
-            return post_request("campaign/sharelink", JsonConvert.SerializeObject(content));
+            return post_request("campaign/sharelinkv2", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_child_account(Dictionary<string, string> child_authkey) 
+        public dynamic get_reseller_child(Dictionary<string, string> child_authkey) 
         {
             dynamic content = new ExpandoObject();
             content.auth_key = JsonConvert.SerializeObject(child_authkey);
-            return post_request("account/getchild", JsonConvert.SerializeObject(content));
+            return post_request("account/getchildv2", JsonConvert.SerializeObject(content));
         }
         public dynamic add_remove_child_credits(String child_authkey, Dictionary<string, int> add_credits, Dictionary<string, int> remove_credits)
         {
