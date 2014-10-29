@@ -24,10 +24,10 @@ List of API calls that you can make, you can click to read more about it. Please
  * [create_child_account](https://apidocs.sendinblue.com/account/#2)(string email, string password, string company_org, string First_name, string Last_name, Dictionary`<string, int>` credits) - Create a Reseller child account
  * [update_child_account](https://apidocs.sendinblue.com/account/#3)(string child_authkey, string company_org, string First_name, string Last_name, string password) - Update a Reseller child account
  * [delete_child_account](https://apidocs.sendinblue.com/account/#4)(string child_authkey) - Delete a Reseller child account
- * [get_child_account](https://apidocs.sendinblue.com/account/#5)(Dictionary`<string, string>` child_authkey) - Get Reseller child accounts
+ * [get_reseller_child](https://apidocs.sendinblue.com/account/#5)(Dictionary`<string, string>` child_authkey) - Get Reseller child accounts
  * [add_remove_child_credits](https://apidocs.sendinblue.com/account/#6)(String child_authkey, Dictionary`<string, int>` add_credits, Dictionary`<string, int>` remove_credits) - Add/Remove Reseller child credits
- * [get_campaigns](https://apidocs.sendinblue.com/campaign/#1)(string type, string status, int page, int page_limit) - Get list of all campaigns or of specific type or status or both
- * [get_campaign](https://apidocs.sendinblue.com/campaign/#1)(int id) - Get specific campaign object
+ * [get_campaigns_v2](https://apidocs.sendinblue.com/campaign/#1)(string type, string status, int page, int page_limit) - Get list of all campaigns or of specific type or status or both
+ * [get_campaign_v2](https://apidocs.sendinblue.com/campaign/#1)(int id) - Get specific campaign object
  * [create_campaign](https://apidocs.sendinblue.com/campaign/#2)(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list) - Create a campaign
  * [delete_campaign](https://apidocs.sendinblue.com/campaign/#3)(int id) - Delete a campaign
  * [update_campaign](https://apidocs.sendinblue.com/campaign/#4)(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list) - Update campaign information
@@ -36,7 +36,7 @@ List of API calls that you can make, you can click to read more about it. Please
  * [send_bat_email](https://apidocs.sendinblue.com/campaign/#7)(int id, List`<string>` email_to) - Send a test Email (bat)
  * [create_trigger_campaign](https://apidocs.sendinblue.com/campaign/#8)(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring) - Create a trigger campaign
  * [update_trigger_campaign](https://apidocs.sendinblue.com/campaign/#9)(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring) - Update trigger campaign information
- * [campaign_share_link](https://apidocs.sendinblue.com/campaign/#10)(List`<int>` campaignids) - Get campaign share link
+ * [share_campaign](https://apidocs.sendinblue.com/campaign/#10)(List`<int>` campaignids) - Get campaign share link
  * [update_campaign_status](https://apidocs.sendinblue.com/campaign/#11)(int id, string status) - Modify a campaign status
  * [get_folders](https://apidocs.sendinblue.com/folder/#1)() - Get list of all the folder details.
  * [get_folder](https://apidocs.sendinblue.com/folder/#2)(int id) - Get all the folder details for folder with id `<id>`
