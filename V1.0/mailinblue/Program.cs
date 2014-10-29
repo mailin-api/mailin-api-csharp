@@ -232,7 +232,7 @@ namespace mailinblue
         public dynamic send_email(Dictionary<string, string> to, string subject, List<string> from_name, string html, string txt, Dictionary<string, string> cc, Dictionary<string, string> bcc, List<string> replyto, Dictionary<string,string> attachment, Dictionary<string, string> headers)
         {
             dynamic content = new ExpandoObject();
-            content.cc = cc; content.text = txt; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from_name = from_name; content.subject = subject; content.headers = headers;
+            content.cc = cc; content.text = txt; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from = from_name; content.subject = subject; content.headers = headers;
             return post_request("email", JsonConvert.SerializeObject(content));
         }
         public dynamic get_webhooks()
