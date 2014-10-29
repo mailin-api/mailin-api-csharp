@@ -233,7 +233,7 @@ namespace mailinblue
         public dynamic get_user(string email)
         {
             dynamic content = new ExpandoObject();
-            return get_request("user/" + email, JsonConvert.SerializeObject(content));
+            return get_request("user/" + email.Trim(), JsonConvert.SerializeObject(content));
         }
         public dynamic create_user(Dictionary<string, string> attributes, int blacklisted, string email, List<int> listid)
         {
