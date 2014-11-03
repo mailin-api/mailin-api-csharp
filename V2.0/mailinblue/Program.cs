@@ -1,16 +1,6 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Prasant
- * Created Date: 30-09-2013
- * Modified Date: 30-09-2014
- * Time: 22:11
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,63 +12,26 @@ namespace mailinblue
 {
     public class API
     {
-        public string base_url = "https://api.sendinblue.com/v1.0/";
+        public string base_url = "https://api.sendinblue.com/v2.0/";
         public string accessId = "";
-        public string secretId = "";
-        public API(string accessId, string secretId)
+        
+        public API(string accessId)
         {
             this.accessId = accessId;
-            this.secretId = secretId;
-        }
-        static string ByteToString(byte[] buff)
-        {
-            string sbinary = "";
-            for (int i = 0; i < buff.Length; i++)
-                sbinary += buff[i].ToString("X2"); /* hex format */
-            return sbinary;
-        }
-        static byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
         }
         private dynamic auth_call(string resource, string method, string content)
         {
             Stream stream = new MemoryStream();
             string url = base_url + resource;
+            string content_type = "application/json";
             // Create request
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             // Set method
             request.Method = method;
-            WebHeaderCollection headers = (request as HttpWebRequest).Headers;
-            string httpDate = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss ") + "GMT";
-            Encoding ae = new UTF8Encoding();
-            string content_type = "application/json";
-            string content_md5 = "";
-            if (!content.Equals(""))
-            {
-                // Need to verify MD5
-                MD5 md5 = System.Security.Cryptography.MD5.Create();
-                byte[] hash = md5.ComputeHash(ae.GetBytes(content));
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hash.Length; i++)
-                {
-                    sb.Append(hash[i].ToString("X2"));
-                }
-                content_md5 = sb.ToString().ToLower();
-            }
-            string canonicalString = method + "\n" + content_md5 + "\n" + content_type + "\n" + httpDate + "\n" + url;
-            HMACSHA1 signature = new HMACSHA1(System.Text.Encoding.ASCII.GetBytes(secretId));
-            signature.Initialize();
-            // Get the actual signature
-            byte[] moreBytes = signature.ComputeHash(ae.GetBytes(canonicalString));
-            string encodedCanonical = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(ByteToString(moreBytes).ToLower()));
             request.ContentType = content_type;
-            request.Headers.Add("X-mailin-date", httpDate);
-            request.Headers.Add("Authorization", accessId + ":" + encodedCanonical);
-            
+            request.Headers.Add("api-key", accessId);
+
             if (method == "POST" || method == "PUT") {
                 using (System.IO.Stream s = request.GetRequestStream())
                 {
@@ -139,17 +92,17 @@ namespace mailinblue
             content.text = text; content.tag = tag; content.web_url = web_url; content.from = from_name; content.to = to; content.type = type;
             return post_request("sms", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_campaigns(string type, string status, int page, int page_limit)
+        public dynamic get_campaigns_v2(string type, string status, int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
             content.type = type; content.status = status; content.page = page; content.page_limit = page_limit;
             String url = "type/" + type + "/status/" + status + "/page/" + page + "/page_limit/" + page_limit;
-            return get_request("campaign/" + url ,"");
+            return get_request("campaign/detailsv2/" + url ,"");
         }
-        public dynamic get_campaign(int id)
+        public dynamic get_campaign_v2(int id)
         {
             dynamic content = new ExpandoObject();
-            return get_request("campaign/" + id, JsonConvert.SerializeObject(content));
+            return get_request("campaign/" + id + "/detailsv2/", JsonConvert.SerializeObject(content));
         }
         public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list)
         {
@@ -280,7 +233,7 @@ namespace mailinblue
         public dynamic get_user(string email)
         {
             dynamic content = new ExpandoObject();
-            return get_request("user/" + email.Trim(), JsonConvert.SerializeObject(content));
+            return get_request("user/" + email, JsonConvert.SerializeObject(content));
         }
         public dynamic create_user(Dictionary<string, string> attributes, int blacklisted, string email, List<int> listid)
         {
@@ -391,17 +344,17 @@ namespace mailinblue
             content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; 
             return put_request("template/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic campaign_share_link(List<int> campaignids)
+        public dynamic share_campaign(List<int> campaignids)
         {
             dynamic content = new ExpandoObject();
             content.camp_ids = campaignids;
-            return post_request("campaign/sharelink", JsonConvert.SerializeObject(content));
+            return post_request("campaign/sharelinkv2", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_child_account(Dictionary<string, string> child_authkey) 
+        public dynamic get_reseller_child(Dictionary<string, string> child_authkey) 
         {
             dynamic content = new ExpandoObject();
             content.auth_key = JsonConvert.SerializeObject(child_authkey);
-            return post_request("account/getchild", JsonConvert.SerializeObject(content));
+            return post_request("account/getchildv2", JsonConvert.SerializeObject(content));
         }
         public dynamic add_remove_child_credits(String child_authkey, Dictionary<string, int> add_credits, Dictionary<string, int> remove_credits)
         {
