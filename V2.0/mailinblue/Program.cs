@@ -135,20 +135,24 @@ namespace mailinblue
             content.notify_url = notify_url; content.type = type;
             return post_request("campaign/" + id + "/recipients", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_processes()
+        public dynamic get_processes(int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
-            return get_request("process", JsonConvert.SerializeObject(content));
+            content.page = page; content.page_limit = page_limit;
+            String url = "page/" + page + "/page_limit/" + page_limit;
+            return get_request("process/index/" + url, "");
         }
         public dynamic get_process(int id)
         {
             dynamic content = new ExpandoObject();
             return get_request("process/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic get_lists()
+        public dynamic get_lists(int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
-            return get_request("list", JsonConvert.SerializeObject(content));
+            content.page = page; content.page_limit = page_limit;
+            String url = "page/" + page + "/page_limit/" + page_limit;
+            return get_request("list/index/" + url, "");
         }
         public dynamic get_list(int id)
         {
@@ -305,10 +309,12 @@ namespace mailinblue
             content.limit = limit; content.start_date = start_date; content.end_date = end_date; content.offset = offset; content.date = date; content.days = days; content.email = email;
             return post_request("report", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_folders()
+        public dynamic get_folders(int page, int page_limit)
         {
             dynamic content = new ExpandoObject();
-            return get_request("folder", JsonConvert.SerializeObject(content));
+            content.page = page; content.page_limit = page_limit;
+            String url = "page/" + page + "/page_limit/" + page_limit;
+            return get_request("folder/index/" + url, "");
         }
         public dynamic get_folder(int id)
         {
