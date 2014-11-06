@@ -26,9 +26,6 @@
 *.unsuccessfulbuild
 ipch/
 obj/
-[Bb]in
-[Dd]ebug*/
-[Rr]elease*/
 Ankh.NoLoad
 
 #MonoDevelop
@@ -42,7 +39,6 @@ _ReSharper*/
 *.sass-cache
 
 #Project files
-[Bb]uild/
 
 #Subversion files
 .svn
