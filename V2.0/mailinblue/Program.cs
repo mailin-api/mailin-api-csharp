@@ -10,7 +10,7 @@ using System.Web;
 
 namespace mailinblue
 {
-    public class API
+public class API
     {
         public string base_url = "https://api.sendinblue.com/v2.0/";
         public string accessId = "";
@@ -201,20 +201,22 @@ namespace mailinblue
             content.cc = cc; content.text = txt; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from = from_name; content.subject = subject; content.headers = headers;
             return post_request("email", JsonConvert.SerializeObject(content));
         }
-        public dynamic get_webhooks()
+
+        public dynamic get_webhooks(string is_plat)
         {
             dynamic content = new ExpandoObject();
-            return get_request("webhook", JsonConvert.SerializeObject(content));
+            return get_request("webhook/index/is_plat/" + is_plat, JsonConvert.SerializeObject(content));
         }
+
         public dynamic get_webhook(int id)
         {
             dynamic content = new ExpandoObject();
             return get_request("webhook/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_webhook(string url, string description, List<string> events)
+        public dynamic create_webhook(string url, string description, List<string> events, int is_plat)
         {
             dynamic content = new ExpandoObject();
-            content.url = url; content.description = description; content.events = events;
+            content.url = url; content.description = description; content.events = events; content.is_plat = is_plat;
             return post_request("webhook", JsonConvert.SerializeObject(content));
         }
         public dynamic delete_webhook(int id)
