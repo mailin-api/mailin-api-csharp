@@ -293,7 +293,7 @@ public class API
             dynamic content = new ExpandoObject();
             return get_request("attribute/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_attribute(string type, Dictionary<string, string> data)
+        public dynamic create_attribute(string type, Object data)
         {
             dynamic content = new ExpandoObject();
             content.type = type; content.data = data;

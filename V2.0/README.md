@@ -53,7 +53,7 @@ List of API calls that you can make, you can click to read more about it. Please
  * [delete_users_list](https://apidocs.sendinblue.com/list/#7)(int id, List`<string>` users) - Delete users from a list
  * [get_attributes](https://apidocs.sendinblue.com/attribute/#1)() - Listing all attributes
  * [get_attribute](https://apidocs.sendinblue.com/attribute/#2)(string id) - Listing a certain type attributes
- * [create_attribute](https://apidocs.sendinblue.com/attribute/#3)(string type, Dictionary`<string, string>` data) - Creating attributes
+ * [create_attribute](https://apidocs.sendinblue.com/attribute/#3)(string type, Object data) - Creating attributes
  * [delete_attribute](https://apidocs.sendinblue.com/attribute/#4)(string id, List`<string>` data) - Deleting attributes of the given type
  * [get_user](https://apidocs.sendinblue.com/user/#2)(string email) - Get information about a user/email
  * [create_update_user](https://apidocs.sendinblue.com/user/#1)(string email, Dictionary`<string, string>` attributes, int blacklisted, List`<int>` listid, List`<int>` listid_unlink, int blacklisted_sms) - Create/Update a user information
