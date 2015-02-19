@@ -142,12 +142,10 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             return get_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list)
+        public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, string attachmentUrl, int inline_image)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; 
-            content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email;
-            content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list;
+            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.attachment_url = attachmentUrl; content.inline_image = inline_image;
             return post_request("campaign", JsonConvert.SerializeObject(content));
         }
         public dynamic delete_campaign(int id)
@@ -155,10 +153,10 @@ namespace mailinblue
             dynamic content = new ExpandoObject();
             return delete_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list)
+        public dynamic update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, string attachmentUrl, int inline_image)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list;
+            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.attachment_url = attachmentUrl; content.inline_image = inline_image;
             return put_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
         public dynamic campaign_report_email(int id, string lang, string email_subject, List<string> email_to, string email_content_type, List<string> email_bcc, List<string> email_cc, string email_body)
@@ -376,10 +374,10 @@ namespace mailinblue
             content.start_date = start_date; content.end_date = end_date; content.email = email;
             return post_request("bounces", JsonConvert.SerializeObject(content));
         }
-        public dynamic send_transactional_template(int id, string to, string cc, string bcc, Dictionary<string, string> attr)
+        public dynamic send_transactional_template(int id, string to, string cc, string bcc, Dictionary<string, string> attr, string attachmentUrl, Dictionary<string, string> attachment)
         {
             dynamic content = new ExpandoObject();
-            content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; 
+            content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; content.attachment_url = attachmentUrl; content.attachment = attachment; 
             return put_request("template/" + id, JsonConvert.SerializeObject(content));
         }
         public dynamic campaign_share_link(List<int> campaignids)
@@ -480,28 +478,28 @@ namespace mailinblue
             body.name = camp_name; body.sender = sender; body.content = content; body.bat = bat_sent; body.listid = listids; body.exclude_list = exclude_list; body.scheduled_date = scheduled_date;
             return put_request("sms/" + id, JsonConvert.SerializeObject(body));
         }
-        public dynamic create_trigger_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring)
+        public dynamic create_trigger_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring, string attachmentUrl, int inline_image)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring;
+            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring; content.attachment_url = attachmentUrl; content.inline_image = inline_image;
             return post_request("campaign", JsonConvert.SerializeObject(content));
         }
-        public dynamic update_trigger_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring)
+        public dynamic update_trigger_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring, string attachmentUrl, int inline_image)
         {
             dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring;
+            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring; content.attachment_url = attachmentUrl; content.inline_image = inline_image;
             return put_request("campaign/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_template(string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status)
+        public dynamic create_template(string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach)
         {
             dynamic body = new ExpandoObject();
-            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status;
+            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status; body.attachment = attach;
             return post_request("template", JsonConvert.SerializeObject(body));
         }
-        public dynamic update_template(int id, string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status)
+        public dynamic update_template(int id, string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach)
         {
             dynamic body = new ExpandoObject();
-            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status;
+            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status; body.attachment = attach;
             return post_request("template/" + id, JsonConvert.SerializeObject(body));
         }
         public dynamic update_campaign_status(int id, string status)

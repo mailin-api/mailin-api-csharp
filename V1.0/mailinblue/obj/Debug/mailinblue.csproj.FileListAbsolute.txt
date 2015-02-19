@@ -40,3 +40,9 @@ C:\mailin-api-csharp\V1.0\mailinblue\bin\Debug\Newtonsoft.Json.dll
 C:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\ResolveAssemblyReference.cache
 C:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\mailinblue.dll
 C:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\mailinblue.pdb
+D:\mailin-api-csharp\V1.0\mailinblue\bin\Debug\mailinblue.dll
+D:\mailin-api-csharp\V1.0\mailinblue\bin\Debug\mailinblue.pdb
+D:\mailin-api-csharp\V1.0\mailinblue\bin\Debug\Newtonsoft.Json.dll
+D:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\ResolveAssemblyReference.cache
+D:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\mailinblue.dll
+D:\mailin-api-csharp\V1.0\mailinblue\obj\Debug\mailinblue.pdb
