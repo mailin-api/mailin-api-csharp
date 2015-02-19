@@ -28,14 +28,14 @@ List of API calls that you can make. Please do note that the order of parameters
  * add_remove_child_credits(String child_authkey, Dictionary`<string, int>` add_credits, Dictionary`<string, int>` remove_credits) - Add/Remove Reseller child credits
  * get_campaigns(string type, string status, int page, int page_limit) - Get list of all campaigns or of specific type or status or both
  * get_campaign(int id) - Get specific campaign object
- * create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list) - Create a campaign
+ * create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, string attachmentUrl, int inline_image) - Create a campaign
  * delete_campaign(int id) - Delete a campaign
- * update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list) - Update campaign information
+ * update_campaign(string id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, string attachmentUrl, int inline_image) - Update campaign information
  * campaign_report_email(int id, string lang, string email_subject, List`<string>` email_to, string email_content_type, List`<string>` email_bcc, List`<string>` email_cc, string email_body) - Sending reports to specific emails
  * campaign_recipients_export(int id, string notify_url, string type) - Export recipients of a campaign
  * send_bat_email(int id, List`<string>` email_to) - Send a test Email (bat)
- * create_trigger_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring) - Create a trigger campaign
- * update_trigger_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring) - Update trigger campaign information
+ * create_trigger_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring, string attachmentUrl, int inline_image) - Create a trigger campaign
+ * update_trigger_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List`<int>` listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List`<int>` exclude_list, int recurring, string attachmentUrl, int inline_image) - Update trigger campaign information
  * campaign_share_link(List`<int>` campaignids) - Get campaign share link
  * update_campaign_status(int id, string status) - Modify a campaign status
  * get_folders() - Get list of all the folder details.
@@ -78,9 +78,9 @@ List of API calls that you can make. Please do note that the order of parameters
  * update_webhook(int id, string url, string description, List`<string>` events) - Editing a webhook
  * delete_bounces(string start_date, string end_date, string email) - Deleting bounces
  * send_email(Dictionary`<string, string>` to, string subject, List`<string>` from_name, string html, string txt, Dictionary`<string, string>` cc, Dictionary`<string, string>` bcc, List`<string>` replyto, Dictionary`<string,string>` attachment, Dictionary`<string, string>` headers) - Sending out a transactional email
- * send_transactional_template(int id, string to, string cc, string bcc, Dictionary`<string, string>` attr) - Send templates created on Sendinblue, through Sendinblue smtp.
- * create_template(string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status) - Create a template 
- * update_template(int id, string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status) - Update template information
+ * send_transactional_template(int id, string to, string cc, string bcc, Dictionary`<string, string>` attr, string attachmentUrl, Dictionary`<string,string>` attachment) - Send templates created on Sendinblue, through Sendinblue smtp.
+ * create_template(string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach) - Create a template 
+ * update_template(int id, string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach) - Update template information
 
 ### SMS call
 
