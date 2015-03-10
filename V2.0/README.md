@@ -58,7 +58,7 @@ List of API calls that you can make, you can click to read more about it. Please
  * [get_user](https://apidocs.sendinblue.com/user/#2)(string email) - Get information about a user/email
  * [create_update_user](https://apidocs.sendinblue.com/user/#1)(string email, Dictionary`<string, string>` attributes, int blacklisted, List`<int>` listid, List`<int>` listid_unlink, int blacklisted_sms) - Create/Update a user information
  * [delete_user](https://apidocs.sendinblue.com/user/#3)(string email) - Deleting user from db is not permitted but this action will unlink him from all lists
- * [import_users](https://apidocs.sendinblue.com/user/#4)(string url, List`<int>` listids, string notify_url, string name) - Import users/emails
+ * [import_users](https://apidocs.sendinblue.com/user/#4)(string url, List`<int>` listids, string notify_url, string name, int folder_id) - Import users/emails
  * [export_users](https://apidocs.sendinblue.com/user/#5)(string export_attrib, string filter, string notify_url) - Export users/emails
  * [get_processes](https://apidocs.sendinblue.com/process/#1)(int page, int page_limit) - Get information about all background processes
  * [get_process](https://apidocs.sendinblue.com/process/#2)(int id) - Get information about a specific process

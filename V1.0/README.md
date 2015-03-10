@@ -58,7 +58,7 @@ List of API calls that you can make. Please do note that the order of parameters
  * get_user(string email) - Get information about a user/email
  * create_update_user(string email, Dictionary`<string, string>` attributes, int blacklisted, List`<int>` listid, List`<int>` listid_unlink, int blacklisted_sms) - Create/Update a user information
  * delete_user(string email) - Deleting user from db is not permitted but this action will unlink him from all lists
- * import_users(string url, List`<int>` listids, string notify_url, string name) - Import users/emails
+ * import_users(string url, List`<int>` listids, string notify_url, string name, int folder_id) - Import users/emails
  * export_users(string export_attrib, string filter, string notify_url) - Export users/emails
  * get_processes() - Get information about all background processes
  * get_process(int id) - Get information about a specific process

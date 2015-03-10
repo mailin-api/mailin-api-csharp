@@ -269,10 +269,10 @@ public class API
             return put_request("user/createdituser", JsonConvert.SerializeObject(content));
         }
 
-        public dynamic import_users(string url, List<int> listids, string notify_url, string name)
+        public dynamic import_users(string url, List<int> listids, string notify_url, string name, int folder_id)
         {
             dynamic content = new ExpandoObject();
-            content.url = url; content.listids = listids; content.notify_url = notify_url; content.name = name;
+            content.url = url; content.listids = listids; content.notify_url = notify_url; content.name = name; content.list_parent = folder_id;
             return post_request("user/import", JsonConvert.SerializeObject(content));
         }
         public dynamic export_users(string export_attrib, string filter, string notify_url)
