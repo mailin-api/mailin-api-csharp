@@ -370,7 +370,7 @@ public class API
             content.rmv_credit = remove_credits;
             return post_request("account/addrmvcredit", JsonConvert.SerializeObject(content));
         }
-        public dynamic update_child_account(string child_authkey, string company_org, string First_name, string Last_name, string password)
+        public dynamic update_child_account(string child_authkey, string company_org, string First_name, string Last_name, string password, List<string> associate_ip, List<string> disassociate_ip)
         {
             dynamic content = new ExpandoObject();
             content.auth_key = child_authkey;
@@ -378,6 +378,8 @@ public class API
             content.first_name = First_name;
             content.last_name = Last_name;
             content.password = password;
+            content.associate_ip = associate_ip;
+            content.disassociate_ip = disassociate_ip;
             return put_request("account", JsonConvert.SerializeObject(content));
         }
         public dynamic delete_child_account(string child_authkey)
@@ -385,7 +387,7 @@ public class API
             dynamic content = new ExpandoObject();
             return delete_request("account/" + child_authkey, JsonConvert.SerializeObject(content));
         }
-        public dynamic create_child_account(string email, string password, string company_org, string First_name, string Last_name, Dictionary<string, int> credits)
+        public dynamic create_child_account(string email, string password, string company_org, string First_name, string Last_name, Dictionary<string, int> credits, List<string> associate_ip)
         {
             dynamic content = new ExpandoObject();
             content.child_email = email;
@@ -394,6 +396,7 @@ public class API
             content.first_name = First_name;
             content.last_name = Last_name;
             content.credits = credits;
+            content.associate_ip = associate_ip;
             return post_request("account", JsonConvert.SerializeObject(content));
         }
         public dynamic create_sender(string sender_name, string sender_email, List<string> ip_domain)
