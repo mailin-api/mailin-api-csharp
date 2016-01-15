@@ -335,10 +335,10 @@ namespace mailinblue
             content.data = data;
             return post_request("attribute/" + id, JsonConvert.SerializeObject(content));
         }
-        public dynamic get_report(int limit, string start_date, string end_date, int offset, string date, int days, string email)
+        public dynamic get_report(int limit, string start_date, string end_date, int offset, string date, int days, string email, string event_name, List<string> tags)
         {
             dynamic content = new ExpandoObject();
-            content.limit = limit; content.start_date = start_date; content.end_date = end_date; content.offset = offset; content.date = date; content.days = days; content.email = email;
+            content.limit = limit; content.start_date = start_date; content.end_date = end_date; content.offset = offset; content.date = date; content.days = days; content.email = email; content.event_name = event_name; content.tags = tags;
             return post_request("report", JsonConvert.SerializeObject(content));
         }
         public dynamic get_folders()
