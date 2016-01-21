@@ -82,411 +82,901 @@ namespace mailinblue
         {
             return auth_call(resource, "PUT", content);
         }
+
+        /*
+            Get SMTP details.
+            No input required
+        */
         public dynamic get_account()
         {
-            dynamic content = new ExpandoObject();
-            return get_request("account", JsonConvert.SerializeObject(content));
+            return get_request("account", "");
         }
-        public dynamic send_sms(string to, string from_name, string text, string web_url, string tag, string type)
+
+        /*
+            Get SMTP details.
+            No input required
+        */
+        public dynamic get_smtp_details()
         {
-            dynamic content = new ExpandoObject();
-            content.text = text; content.tag = tag; content.web_url = web_url; content.from = from_name; content.to = to; content.type = type;
-            return post_request("sms", JsonConvert.SerializeObject(content));
+            return get_request("account/smtpdetail", "");
         }
-        public dynamic get_campaigns_v2(string type, string status, int page, int page_limit)
+
+        /*
+            Get Reseller child Account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} auth_key: 16 character authorization key of Reseller child. Example : To get the details of more than one child account, use, {"key1":"abC01De2fGHI3jkL","key2":"mnO45Pq6rSTU7vWX"} [Mandatory]
+        */
+        public dynamic get_reseller_child(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.type = type; content.status = status; content.page = page; content.page_limit = page_limit;
-            String url = "type/" + type + "/status/" + status + "/page/" + page + "/page_limit/" + page_limit;
-            return get_request("campaign/detailsv2/" + url, "");
+            return post_request("account/getchildv2", JsonConvert.SerializeObject(data));
         }
-        public dynamic get_campaign_v2(int id)
+
+        /*
+            Add/Remove Reseller child's Email/Sms credits.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} auth_key: 16 character authorization key of Reseller child to modify credits [Mandatory]
+            @options data {Array} add_credit: Number of email & sms credits to be added. You can assign either email or sms credits, one at a time other will remain 0. [Mandatory: if rmv_credit is empty]
+                - email_credit {Integer} number of email credits
+                - sms_credit {Integer} Number of sms credts
+            @options data {Array} rmv_credit: Number of email & sms credits to be removed. You can assign either email or sms credits, one at a time other will remain 0. [Mandatory: if add_credits is empty]
+                - email_credit {Integer} number of email credits
+                - sms_credit {Integer} Number of sms credts
+        */
+        public dynamic add_remove_child_credits(Object data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("campaign/" + id + "/detailsv2/", JsonConvert.SerializeObject(content));
+            return post_request("account/addrmvcredit", JsonConvert.SerializeObject(data));
         }
-        public dynamic create_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, string attachmentUrl, int inline_image, int send_now)
+
+        /*
+            Delete Child Account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} auth_key: 16 character authorization key of Reseller child to be deleted [Mandatory]
+        */
+        public dynamic delete_child_account(Dictionary<string, string> data)
         {
-            dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.attachment_url = attachmentUrl; content.inline_image = inline_image; content.send_now = send_now;
-            return post_request("campaign", JsonConvert.SerializeObject(content));
+            String child_authkey = data["auth_key"];
+            return delete_request("account/" + child_authkey, "");
         }
-        public dynamic delete_campaign(int id)
+
+        /*
+            Create Child Account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} child_email: Email address of Reseller child [Mandatory]
+            @options data {String} password: Password of Reseller child to login [Mandatory]
+            @options data {String} company_org: Name of Reseller child’s company [Mandatory]
+            @options data {String} first_name: First name of Reseller child [Mandatory]
+            @options data {String} last_name: Last name of Reseller child [Mandatory]
+            @options data {Array} credits: Number of email & sms credits respectively, which will be assigned to the Reseller child’s account [Optional]
+                - email_credit {Integer} number of email credits
+                - sms_credit {Integer} Number of sms credts
+            @options data {Array} associate_ip: Associate dedicated IPs to reseller child. You can use commas to separate multiple IPs [Optional]
+        */
+        public dynamic create_child_account(Object data)
         {
-            dynamic content = new ExpandoObject();
-            return delete_request("campaign/" + id, JsonConvert.SerializeObject(content));
+            return post_request("account", JsonConvert.SerializeObject(data));
         }
-        public dynamic update_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, string attachmentUrl, int inline_image, int send_now)
+
+        /*
+            Update Child Account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} auth_key: 16 character authorization key of Reseller child to be modified [Mandatory]
+            @options data {String} company_org: Name of Reseller child’s company [Optional]
+            @options data {String} first_name: First name of Reseller child [Optional]
+            @options data {String} last_name: Last name of Reseller child [Optional]
+            @options data {String} password: Password of Reseller child to login [Optional]
+            @options data {Array} associate_ip: Associate dedicated IPs to reseller child. You can use commas to separate multiple IPs [Optional]
+            @options data {Array} disassociate_ip: Disassociate dedicated IPs from reseller child. You can use commas to separate multiple IPs [Optional]
+        */
+        public dynamic update_child_account(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.attachment_url = attachmentUrl; content.inline_image = inline_image; content.send_now = send_now;
-            return put_request("campaign/" + id, JsonConvert.SerializeObject(content));
+            return post_request("account", JsonConvert.SerializeObject(data));
         }
-        public dynamic campaign_report_email(int id, string lang, string email_subject, List<string> email_to, string email_content_type, List<string> email_bcc, List<string> email_cc, string email_body)
+
+        /*
+            Get all campaigns detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} type: Type of campaign. Possible values – classic, trigger, sms, template ( case sensitive ) [Optional]
+            @options data {String} status: Status of campaign. Possible values – draft, sent, archive, queued, suspended, in_process, temp_active, temp_inactive ( case sensitive ) [Optional]
+            @options data {Integer} page: Maximum number of records per request is 500, if there are more than 500 campaigns then you can use this parameter to get next 500 results [Optional]
+            @options data {Integer} page_limit: This should be a valid number between 1-1000. If page limit is kept empty or >1000, default is 500 [Optional]
+        */
+        public dynamic get_campaigns_v2(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.lang = lang; content.email_subject = email_subject; content.email_to = email_to; content.email_content_type = email_content_type; content.email_bcc = email_bcc; content.email_cc = email_cc; content.email_body = email_body;
-            return post_request("campaign/" + id + "/report", JsonConvert.SerializeObject(content));
+            string type = data["type"].ToString(); string status = data["status"].ToString(); string page = data["page"].ToString(); string page_limit = data["page_limit"].ToString();
+            string url = "";
+            if (type == "" && status == "" && page == "" && page_limit == "")
+            {
+                url = "campaign/detailsv2/";
+            }
+            else
+            {
+                url = "campaign/detailsv2/type/" + type + "/status/" + status + "/page/" + page + "/page_limit/" + page_limit + "/";
+            }
+            return get_request(url, "");
         }
-        public dynamic campaign_recipients_export(int id, string notify_url, string type)
+
+        /*  
+            Get a particular campaign detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Unique Id of the campaign [Mandatory]
+        */
+        public dynamic get_campaign_v2(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            content.notify_url = notify_url; content.type = type;
-            return post_request("campaign/" + id + "/recipients", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return get_request("campaign/" + id + "/detailsv2/", "");
         }
-        public dynamic get_processes(int page, int page_limit)
+
+        /*
+            Create and Schedule your campaigns. It returns the ID of the created campaign.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} category: Tag name of the campaign [Optional]
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} name: Name of the campaign [Mandatory]
+            @options data {String} bat: Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Mandatory: if html_url is empty]
+            @options data {String} html_url: Url which content is the body of content [Mandatory: if html_content is empty]
+            @options data {Array} listid: These are the lists to which the campaign has been sent [Mandatory: if scheduled_date is not empty]
+            @options data {String} scheduled_date: The day on which the campaign is supposed to run[Optional]
+            @options data {String} subject: Subject of the campaign [Mandatory]
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_field: This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM] To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Array} exclude_list: These are the lists which must be excluded from the campaign [Optional]
+            @options data {String} attachment_url: Provide the absolute url of the attachment [Optional]
+            @options data {Integer} inline_image: Status of inline image. Possible values = 0 (default) & 1. inline_image = 0 means image can’t be embedded, & inline_image = 1 means image can be embedded, in the email [Optional]
+            @options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic create_campaign(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.page = page; content.page_limit = page_limit;
+            return post_request("campaign", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Delete your campaigns.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of campaign to be deleted [Mandatory]
+        */
+        public dynamic delete_campaign(Dictionary<string, int> data)
+        {
+            string id = data["id"].ToString();
+            return delete_request("campaign/" + id, "");
+        }
+
+        /*
+            Update your campaign.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of campaign to be modified [Mandatory]
+            @options data {String} category: Tag name of the campaign [Optional]
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} name: Name of the campaign [Optional]
+            @options data {String} bat: Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Optional]
+            @options data {String} html_url: Url which content is the body of content [Optional]
+            @options data {Array} listid These are the lists to which the campaign has been sent [Mandatory: if scheduled_date is not empty]
+            @options data {String} scheduled_date: The day on which the campaign is supposed to run[Optional]
+            @options data {String} subject: Subject of the campaign.
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_field: This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM]. To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Array} exclude_list: These are the lists which must be excluded from the campaign [Optional]
+            @options data {String} attachment_url: Provide the absolute url of the attachment [Optional]
+            @options data {Integer} inline_image: Status of inline image. Possible values = 0 (default) & 1. inline_image = 0 means image can’t be embedded, & inline_image = 1 means image can be embedded, in the email [Optional]
+            @options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic update_campaign(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString();
+            return put_request("campaign/" + id, JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Send report of Sent and Archived campaign.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of campaign to send its report [Mandatory]
+            @options data {String} lang: Language of email content. Possible values – fr (default), en, es, it & pt [Optional]
+            @options data {String} email_subject: Message subject [Mandatory]
+            @options data {Array} email_to: Email address of the recipient(s). Example: "test@example.net". You can use commas to separate multiple recipients [Mandatory]
+            @options data {String} email_content_type: Body of the message in text/HTML version. Possible values – text & html [Mandatory]
+            @options data {Array} email_bcc: Same as email_to but for Bcc [Optional]
+            @options data {Array} email_cc: Same as email_to but for Cc [Optional]
+            @options data {String} email_body: Body of the message [Mandatory]
+        */
+        public dynamic campaign_report_email(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString(); 
+            return post_request("campaign/" + id + "/report", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Export the recipients of a specified campaign.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of campaign to export its recipients [Mandatory]
+            @options data {String} notify_url: URL that will be called once the export process is finished [Mandatory]
+            @options data {String} type: Type of recipients. Possible values – all, non_clicker, non_opener, clicker, opener, soft_bounces, hard_bounces & unsubscribes [Mandatory]
+        */
+        public dynamic campaign_recipients_export(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString();
+            return post_request("campaign/" + id + "/recipients", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Send a Test Campaign.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of the campaign [Mandatory]
+            @options data {Array} emails: Email address of recipient(s) existing in the one of the lists & should not be blacklisted. Example: "test@example.net". You can use commas to separate multiple recipients [Mandatory]
+        */
+        public dynamic send_bat_email(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString();
+            return put_request("campaign/" + id + "/test", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Create and schedule your Trigger campaigns.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} category: Tag name of the campaign [Optional]
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} trigger_name: Name of the campaign [Mandatory]
+            @options data {String} bat: Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Mandatory: if html_url is empty]
+            @options data {String} html_url: Url which content is the body of content [Mandatory: if html_content is empty]
+            @options data {Array} listid: These are the lists to which the campaign has been sent [Mandatory: if scheduled_date is not empty]
+            @options data {String} scheduled_date: The day on which the campaign is supposed to run[Optional]
+            @options data {String} subject: Subject of the campaign [Mandatory]
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_field: This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM]. To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Array} exclude_list: These are the lists which must be excluded from the campaign [Optional]
+            @options data {Integer} recurring: Type of trigger campaign. Possible values = 0 (default) & 1. recurring = 0 means contact can receive the same Trigger campaign only once, & recurring = 1 means contact can receive the same Trigger campaign several times [Optional]
+            @options data {String} attachment_url: Provide the absolute url of the attachment [Optional]
+            @options data {Integer} inline_image: Status of inline image. Possible values = 0 (default) & 1. inline_image = 0 means image can’t be embedded, & inline_image = 1 means image can be embedded, in the email [Optional]
+            @options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic create_trigger_campaign(Object data)
+        {
+            return post_request("campaign", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Update and schedule your Trigger campaigns.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of Trigger campaign to be modified [Mandatory]
+            @options data {String} category: Tag name of the campaign [Optional]
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} trigger_name: Name of the campaign [Mandatory]
+            @options data {String} bat Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Mandatory: if html_url is empty]
+            @options data {String} html_url: Url which content is the body of content [Mandatory: if html_content is empty]
+            @options data {Array} listid: These are the lists to which the campaign has been sent [Mandatory: if scheduled_date is not empty]
+            @options data {String} scheduled_date: The day on which the campaign is supposed to run[Optional]
+            @options data {String} subject: Subject of the campaign [Mandatory]
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients, please make sure that the sender details are defined here, and in case of no sender, you can add them also via API & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_field: This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM]. To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Array} exclude_list: These are the lists which must be excluded from the campaign [Optional]
+            @options data {Integer} recurring: Type of trigger campaign. Possible values = 0 (default) & 1. recurring = 0 means contact can receive the same Trigger campaign only once, & recurring = 1 means contact can receive the same Trigger campaign several times [Optional]
+            @options data {String} attachment_url: Provide the absolute url of the attachment [Optional]
+            @options data {Integer} inline_image: Status of inline image. Possible values = 0 (default) & 1. inline_image = 0 means image can’t be embedded, & inline_image = 1 means image can be embedded, in the email [Optional]
+            @options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic update_trigger_campaign(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString();
+            return put_request("campaign/" + id, JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Get the Campaign name, subject and share link of the classic type campaigns only which are sent, for those which are not sent and the rest of campaign types like trigger, template & sms, will return an error message of share link not available.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Array} camp_ids: Id of campaign to get share link. You can use commas to separate multiple ids [Mandatory]
+        */
+        public dynamic share_campaign(Object data)
+        {
+            return post_request("campaign/sharelinkv2", JsonConvert.SerializeObject(data));
+        }
+        
+        /*
+            Update the Campaign status.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of campaign to update its status [Mandatory]
+            @options data {String} status: Types of status. Possible values – suspended, archive, darchive, sent, queued, replicate and replicate_template ( case sensitive ) [Mandatory]
+        */
+        public dynamic update_campaign_status(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString();
+            return put_request("campaign/" + id + "/updatecampstatus", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Get all the processes information under the account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} page: Maximum number of records per request is 50, if there are more than 50 processes then you can use this parameter to get next 50 results [Mandatory]
+            @options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
+        */
+        public dynamic get_processes(Dictionary<string, int> data)
+        {
+            string page = data["page"].ToString(); string page_limit = data["page_limit"].ToString();
             String url = "page/" + page + "/page_limit/" + page_limit;
             return get_request("process/index/" + url, "");
         }
-        public dynamic get_process(int id)
+
+        /*
+            Get the process information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of process to get details [Mandatory]
+        */
+        public dynamic get_process(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("process/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return get_request("process/" + id, "");
         }
-        public dynamic get_lists(int page, int page_limit)
+
+        /*
+            Get all lists detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} list_parent: This is the existing folder id & can be used to get all lists belonging to it [Optional]
+            @options data {Integer} page: Maximum number of records per request is 50, if there are more than 50 processes then you can use this parameter to get next 50 results [Mandatory]
+            @options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
+        */
+        public dynamic get_lists(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            content.page = page; content.page_limit = page_limit;
-            String url = "page/" + page + "/page_limit/" + page_limit;
+            string list_parent = data["list_parent"].ToString(); string page = data["page"].ToString(); string page_limit = data["page_limit"].ToString();
+            String url = "page/" + page + "/page_limit/" + page_limit + "/list_parent/" + list_parent;
             return get_request("list/index/" + url, "");
         }
-        public dynamic get_list(int id)
+
+        /*
+            Get a particular list detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of list to get details [Mandatory]
+        */
+        public dynamic get_list(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("list/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic create_list(string list_name, int list_parent)
-        {
-            dynamic content = new ExpandoObject();
-            content.list_name = list_name; content.list_parent = list_parent;
-            return post_request("list", JsonConvert.SerializeObject(content));
-        }
-        public dynamic delete_list(int id)
-        {
-            dynamic content = new ExpandoObject();
-            return delete_request("list/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic update_list(int id, string list_name, int list_parent)
-        {
-            dynamic content = new ExpandoObject();
-            content.list_name = list_name; content.list_parent = list_parent;
-            return put_request("list/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic display_list_users(List<int> listids, int page, int page_limit)
-        {
-            dynamic content = new ExpandoObject();
-            content.listids = listids; content.page = page; content.page_limit = page_limit;
-            return put_request("list/display", JsonConvert.SerializeObject(content));
-        }
-        public dynamic add_users_list(int id, List<string> users)
-        {
-            dynamic content = new ExpandoObject();
-            content.users = users;
-            return post_request("list/" + id + "/users", JsonConvert.SerializeObject(content));
-        }
-        public dynamic delete_users_list(int id, List<string> users)
-        {
-            dynamic content = new ExpandoObject();
-            content.users = users;
-            return put_request("list/" + id + "/delusers", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return get_request("list/" + id, "");
         }
 
-        public dynamic send_email(Dictionary<string, string> to, string subject, List<string> from_name, string html, string txt, Dictionary<string, string> cc, Dictionary<string, string> bcc, List<string> replyto, Dictionary<string, string> attachment, Dictionary<string, string> headers)
+        /*
+            Create a new list.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} list_name: Desired name of the list to be created [Mandatory]
+            @options data {Integer} list_parent: Folder ID [Mandatory]
+        */
+        public dynamic create_list(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.cc = cc; content.text = txt; content.bcc = bcc; content.replyto = replyto; content.html = html; content.to = to; content.attachment = attachment; content.from = from_name; content.subject = subject; content.headers = headers;
-            return post_request("email", JsonConvert.SerializeObject(content));
+            return post_request("list", JsonConvert.SerializeObject(data));
         }
 
-        public dynamic get_webhooks(string is_plat)
+        /*
+            Delete a specific list.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of list to be deleted [Mandatory]
+        */
+        public dynamic delete_list(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("webhook/index/is_plat/" + is_plat, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return delete_request("list/" + id, "");
         }
 
-        public dynamic get_webhook(int id)
+        /*
+            Update a list.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of list to be modified [Mandatory]
+            @options data {String} list_name: Desired name of the list to be modified [Optional]
+            @options data {Integer} list_parent: Folder ID [Mandatory]
+        */
+        public dynamic update_list(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("webhook/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic create_webhook(string url, string description, List<string> events, int is_plat)
-        {
-            dynamic content = new ExpandoObject();
-            content.url = url; content.description = description; content.events = events; content.is_plat = is_plat;
-            return post_request("webhook", JsonConvert.SerializeObject(content));
-        }
-        public dynamic delete_webhook(int id)
-        {
-            dynamic content = new ExpandoObject();
-            return delete_request("webhook/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic update_webhook(int id, string url, string description, List<string> events)
-        {
-            dynamic content = new ExpandoObject();
-            content.url = url; content.description = description; content.events = events;
-            return put_request("webhook/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic get_statistics(int aggregate, string tag, int days, string end_date, string start_date)
-        {
-            dynamic content = new ExpandoObject();
-            content.aggregate = aggregate; content.tag = tag; content.days = days; content.end_date = end_date; content.start_date = start_date;
-            return post_request("statistics", JsonConvert.SerializeObject(content));
-        }
-        public dynamic get_user(string email)
-        {
-            dynamic content = new ExpandoObject();
-            return get_request("user/" + email.Trim(), JsonConvert.SerializeObject(content));
-        }
-        public dynamic create_user(Dictionary<string, string> attributes, int blacklisted, string email, List<int> listid)
-        {
-            dynamic content = new ExpandoObject();
-            content.attributes = attributes; content.blacklisted = blacklisted; content.email = email; content.listid = listid;
-            return post_request("user", JsonConvert.SerializeObject(content));
-        }
-        public dynamic delete_user(string email)
-        {
-            dynamic content = new ExpandoObject();
-            return delete_request("user/" + email, JsonConvert.SerializeObject(content));
-        }
-        public dynamic update_user(string id, Dictionary<string, string> attributes, int blacklisted, List<int> listid, List<int> listid_unlink)
-        {
-            dynamic content = new ExpandoObject();
-            content.attributes = attributes; content.blacklisted = blacklisted; content.listid = listid; content.listid_unlink = listid_unlink;
-            return put_request("user/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("list/" + id, JsonConvert.SerializeObject(data));
         }
 
-        public dynamic create_update_user(string email, Dictionary<string, string> attributes, int blacklisted, List<int> listid, List<int> listid_unlink, int blacklisted_sms)
+        /*
+            Display details of all users for the given lists.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Array} listids: These are the list ids to get their data. The ids found will display records [Mandatory]
+            @options data {String} timestamp: This is date-time filter to fetch modified user records >= this time. Valid format Y-m-d H:i:s. Example: "2015-05-22 14:30:00" [Optional]
+            @options data {Integer} page: Maximum number of records per request is 500, if in your list there are more than 500 users then you can use this parameter to get next 500 results [Optional]
+            @options data {Integer} page_limit: This should be a valid number between 1-500 [Optional]
+        */
+        public dynamic display_list_users(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.email = email;
-            content.attributes = attributes;
-            content.blacklisted = blacklisted;
-            content.listid = listid;
-            content.listid_unlink = listid_unlink;
-            content.blacklisted_sms = blacklisted_sms;
-            return put_request("user/createdituser", JsonConvert.SerializeObject(content));
+            return put_request("list/display", JsonConvert.SerializeObject(data));
         }
 
-        public dynamic import_users(string url, List<int> listids, string notify_url, string name, int folder_id)
+
+        /*
+            Add already existing users in the SendinBlue contacts to the list.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of list to link users in it [Mandatory]
+            @options data {Array} users: Email address of the already existing user(s) in the SendinBlue contacts. Example: "test@example.net". You can use commas to separate multiple users [Mandatory]
+        */
+        public dynamic add_users_list(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.url = url; content.listids = listids; content.notify_url = notify_url; content.name = name; content.list_parent = folder_id;
-            return post_request("user/import", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return post_request("list/" + id + "/users", JsonConvert.SerializeObject(data));
         }
-        public dynamic export_users(string export_attrib, string filter, string notify_url)
+
+        /*
+            Delete already existing users in the SendinBlue contacts from the list.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of list to unlink users from it [Mandatory]
+            @options data {Array} users: Email address of the already existing user(s) in the SendinBlue contacts to be modified. Example: "test@example.net". You can use commas to separate multiple users [Mandatory]
+        */
+        public dynamic delete_users_list(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.export_attrib = export_attrib; content.filter = filter; content.notify_url = notify_url;
-            return post_request("user/export", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("list/" + id + "/delusers", JsonConvert.SerializeObject(data));
         }
+
+        /*
+            Send Transactional Email.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Array} to: Email address of the recipient(s). It should be sent as an associative array. Example: array("to@example.net"=>"to whom"). You can use commas to separate multiple recipients [Mandatory]
+            @options data {String} subject: Message subject [Mandatory]
+            @options data {Array} from Email address for From header. It should be sent as an array. Example: array("from@email.com","from email") [Mandatory]
+            @options data {String} html: Body of the message. (HTML version) [Mandatory]. To send inline images, use <img src="{YourFileName.Extension}" alt="image" border="0" >, the 'src' attribute value inside {} (curly braces) should be same as the filename used in 'inline_image' parameter
+            @options data {String} text: Body of the message. (text version) [Optional]
+            @options data {Array} cc: Same as to but for Cc. Example: array("cc@example.net","cc whom") [Optional]
+            @options data {Array} bcc: Same as to but for Bcc. Example: array("bcc@example.net","bcc whom") [Optional]
+            @options data {Array} replyto: Same as from but for Reply To. Example: array("from@email.com","from email") [Optional]
+            @options data {Array} attachment: Provide the absolute url of the attachment/s. Possible extension values = gif, png, bmp, cgm, jpg, jpeg, txt, css, shtml, html, htm, csv, zip, pdf, xml, doc, xls, ppt, tar and ez. To send attachment/s generated on the fly you have to pass your attachment/s filename & its base64 encoded chunk data as an associative array. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple attachments [Optional]
+            @options data {Array} headers: The headers will be sent along with the mail headers in original email. Example: array("Content-Type"=>"text/html; charset=iso-8859-1"). You can use commas to separate multiple headers [Optional]
+            @options data {Array} inline_image: Pass your inline image/s filename & its base64 encoded chunk data as an associative array. Possible extension values = gif, png, bmp, cgm, jpg and jpeg. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple inline images [Optional]
+        */
+        public dynamic send_email(Object data)
+        {
+            return post_request("email", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            To retrieve details of all webhooks.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} is_plat: Flag to get webhooks. Possible values – 0 & 1. Example: to get Transactional webhooks, use $is_plat=0, to get Marketing webhooks, use $is_plat=1, & to get all webhooks, use $is_plat="" [Optional]
+        */
+        public dynamic get_webhooks(Dictionary<string, string> data)
+        {
+            string is_plat = data["is_plat"].ToString();
+            return get_request("webhook/index/is_plat/" + is_plat, "");
+        }
+
+        /*
+            To retrieve details of any particular webhook.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of webhook to get details [Mandatory]
+        */
+        public dynamic get_webhook(Dictionary<string, int> data)
+        {
+            string id = data["id"].ToString();
+            return get_request("webhook/" + id, "");
+        }
+
+        /*
+            Create a Webhook.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} url: URL that will be triggered by a webhook [Mandatory]
+            @options data {String} description: Webook description [Optional]
+            @options data {Array} events: Set of events. You can use commas to separate multiple events. Possible values for Transcational webhook – request, delivered, hard_bounce, soft_bounce, blocked, spam, invalid_email, deferred, click, & opened and Possible Values for Marketing webhook – spam, opened, click, hard_bounce, unsubscribe, soft_bounce & list_addition ( case sensitive ) [Mandatory]
+            @options data {Integer} is_plat: Flag to create webhook type. Possible values – 0 (default) & 1. Example: to create Transactional webhooks, use $is_plat=0, & to create Marketing webhooks, use $is_plat=1 [Optional]
+        */
+        public dynamic create_webhook(Object data)
+        {
+            return post_request("webhook", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Delete a webhook.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of webhook to be deleted [Mandatory]
+        */
+        public dynamic delete_webhook(Dictionary<string, int> data)
+        {
+            string id = data["id"].ToString();
+            return delete_request("webhook/" + id, "");
+        }
+
+        /*
+            Update a webhook.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of webhook to be modified [Mandatory]
+            @options data {String} url: URL that will be triggered by a webhook [Mandatory]
+            @options data {String} description: Webook description [Optional]
+            @options data {Array} events: Set of events. You can use commas to separate multiple events. Possible values for Transcational webhook – request, delivered, hard_bounce, soft_bounce, blocked, spam, invalid_email, deferred, click, & opened and Possible Values for Marketing webhook – spam, opened, click, hard_bounce, unsubscribe, soft_bounce & list_addition ( case sensitive ) [Mandatory]
+        */
+        public dynamic update_webhook(Dictionary<string, Object> data)
+        {
+            string id = data["id"].ToString(); 
+            return put_request("webhook/" + id, JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Aggregate / date-wise report of the SendinBlue SMTP account.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} aggregate: This is used to indicate, you are interested in all-time totals. Possible values – 0 & 1. aggregate = 0 means it will not aggregate records, and will show stats per day/date wise [Optional]
+            @options data {String} start_date: The start date to look up statistics. Date must be in YYYY-MM-DD format and should be before the end_date [Optional]
+            @options data {String} end_date: The end date to look up statistics. Date must be in YYYY-MM-DD format and should be after the start_date [Optional]
+            @options data {Integer} days: Number of days in the past to include statistics ( Includes today ). It must be an integer greater than 0 [Optional]
+            @options data {String} tag: The tag you will specify to retrieve detailed stats. It must be an existing tag that has statistics [Optional]
+        */
+        public dynamic get_statistics(Object data)
+        {
+            return post_request("statistics", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Get Access a specific user Information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} email: Email address of the already existing user in the SendinBlue contacts [Mandatory]
+        */
+        public dynamic get_user(Dictionary<string, string> data)
+        {
+            string email = data["email"];
+            return get_request("user/" + email.Trim(), "");
+        }
+
+        /*
+            Unlink existing user from all lists.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} email: Email address of the already existing user in the SendinBlue contacts to be unlinked from all lists [Mandatory]
+        */
+        public dynamic delete_user(Dictionary<string, string> data)
+        {
+            string email = data["email"];
+            return delete_request("user/" + email.Trim(), "");
+        }
+
+        /*
+            Create a new user if an email provided as input, doesn’t exists in the contact list of your SendinBlue account, otherwise it will update the existing user.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} email: Email address of the user to be created in SendinBlue contacts. Already existing email address of user in the SendinBlue contacts to be modified [Mandatory]
+            @options data {Array} attributes: The name of attribute present in your SendinBlue account. It should be sent as an associative array. Example: array("NAME"=>"name"). You can use commas to separate multiple attributes [Optional]
+            @options data {Integer} blacklisted: This is used to blacklist/ Unblacklist a user. Possible values – 0 & 1. blacklisted = 1 means user has been blacklisted [Optional]
+            @options data {Array} listid: The list id(s) to be linked from user [Optional]
+            @options data {Array} listid_unlink: The list id(s) to be unlinked from user [Optional]
+            @options data {Array} blacklisted_sms: This is used to blacklist/ Unblacklist a user’s SMS number. Possible values – 0 & 1. blacklisted_sms = 1 means user’s SMS number has been blacklisted [Optional]
+        */
+        public dynamic create_update_user(Object data)
+        {
+            return put_request("user/createdituser", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Import Users Information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} url: The URL of the file to be imported. Possible file types – .txt, .csv [Mandatory: if body is empty]
+            @options data {String} body: The Body with csv content to be imported. Example: ‘NAME;SURNAME;EMAIL\n"Name1";"Surname1";"example1@example.net"\n"Name2";"Surname2";"example2@example.net"‘, where \n separates each user data. You can use semicolon to separate multiple attributes [Mandatory: if url is empty]
+            @options data {Array} listids: These are the list ids in which the the users will be imported [Mandatory: if name is empty]
+            @options data {String} notify_url: URL that will be called once the import process is finished [Optional] In notify_url, we are sending the content using POST method
+            @options data {String} name: This is new list name which will be created first & then users will be imported in it [Mandatory: if listids is empty]
+            @options data {Integer} list_parent: This is the existing folder id & can be used with name parameter to make newly created list’s desired parent [Optional]
+        */        
+        public dynamic import_users(Object data)
+        {
+            return post_request("user/import", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Export Users Information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} export_attrib: The name of attribute present in your SendinBlue account. You can use commas to separate multiple attributes. Example: "EMAIL,NAME,SMS" [Optional]
+            @options data {String} filter: Filter can be added to export users. Example: "{\"blacklisted\":1}", will export all blacklisted users [Mandatory]
+            @options data {String} notify_url: URL that will be called once the export process is finished [Optional]
+        */
+        public dynamic export_users(Object data)
+        {
+            return post_request("user/export", JsonConvert.SerializeObject(data));
+        }
+
+        /*
+            Access all the attributes information under the account.
+            No input required
+        */
         public dynamic get_attributes()
         {
-            dynamic content = new ExpandoObject();
-            return get_request("attribute", JsonConvert.SerializeObject(content));
+            return get_request("attribute", "");
         }
-        public dynamic get_attribute(string id)
+
+        /*
+            Access the specific type of attribute information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} type: Type of attribute. Possible values – normal, transactional, category, calculated & global [Optional]
+        */
+        public dynamic get_attribute(Dictionary<string, string> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("attribute/" + id, JsonConvert.SerializeObject(content));
+            string type = data["type"];
+            return get_request("attribute/" + type, "");
         }
-        public dynamic create_attribute(string type, Object data)
+
+        /*
+            Create an Attribute.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} type: Type of attribute. Possible values – normal, transactional, category, calculated & global ( case sensitive ) [Mandatory]
+            @options data {Array} data: The name and data type of ‘normal’ & ‘transactional’ attribute to be created in your SendinBlue account. It should be sent as an associative array. Example: array(‘ATTRIBUTE_NAME1′ => ‘DATA_TYPE1′, ‘ATTRIBUTE_NAME2’=> ‘DATA_TYPE2′).
+            The name and data value of ‘category’, ‘calculated’ & ‘global’, should be sent as JSON string. Example: ‘[{ "name":"ATTRIBUTE_NAME1", "value":"Attribute_value1" }, { "name":"ATTRIBUTE_NAME2", "value":"Attribute_value2" }]’. You can use commas to separate multiple attributes [Mandatory]
+        */
+        public dynamic create_attribute(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.type = type; content.data = data;
-            return post_request("attribute", JsonConvert.SerializeObject(content));
+            return post_request("attribute", JsonConvert.SerializeObject(data));
         }
-        public dynamic delete_attribute(string id, List<string> data)
+
+        /*
+            Delete a specific type of attribute information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} type: Type of attribute to be deleted [Mandatory]
+        */
+        public dynamic delete_attribute(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.data = data;
-            return post_request("attribute/" + id, JsonConvert.SerializeObject(content));
+            string type = data["type"].ToString();
+            return post_request("attribute/" + type, JsonConvert.SerializeObject(data));
         }
-        public dynamic get_report(int limit, string start_date, string end_date, int offset, string date, int days, string email, string event_name, List<string> tags)
+
+
+        /*
+            Get Email Event report.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} limit: To limit the number of results returned. It should be an integer [Optional]
+            @options data {String} start_date: The start date to get report from. Date must be in YYYY-MM-DD format and should be before the end_date [Optional]
+            @options data {String} end_date: The end date to get report till date. Date must be in YYYY-MM-DD format and should be after the start_date [Optional]
+            @options data {Integer} offset: Beginning point in the list to retrieve from. It should be an integer [Optional]
+            @options data {String} date: Specific date to get its report. Date must be in YYYY-MM-DD format and should be earlier than todays date [Optional]
+            @options data {Integer} days: Number of days in the past (includes today). If specified, must be an integer greater than 0 [Optional]
+            @options data {String} email: Email address to search report for [Optional]
+            @options data {String} event: Type of event to search report for [Optional]
+            @options data {Array} tags: The existing tags you will specify to search report for [Optional]
+
+        */
+        public dynamic get_report(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.limit = limit; content.start_date = start_date; content.end_date = end_date; content.offset = offset; content.date = date; content.days = days; content.email = email; content.event_name = event_name; content.tags = tags;
-            return post_request("report", JsonConvert.SerializeObject(content));
+            return post_request("report", JsonConvert.SerializeObject(data));
         }
-        public dynamic get_folders(int page, int page_limit)
+
+        /*
+            Get all folders detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} page: Maximum number of records per request is 50, if there are more than 50 folders then you can use this parameter to get next 50 results [Mandatory]
+            @options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
+        */
+        public dynamic get_folders(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            content.page = page; content.page_limit = page_limit;
+            string page = data["page"].ToString(); string page_limit = data["page_limit"].ToString();
             String url = "page/" + page + "/page_limit/" + page_limit;
             return get_request("folder/index/" + url, "");
         }
-        public dynamic get_folder(int id)
+
+        /*
+            Get a particular folder detail.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of folder to get details [Mandatory]
+        */
+        public dynamic get_folder(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            return get_request("folder/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return get_request("folder/" + id, "");
         }
-        public dynamic create_folder(string name)
+
+        /*
+            Create a new folder.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} name: Desired name of the folder to be created [Mandatory]
+        */
+        public dynamic create_folder(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.name = name;
-            return post_request("folder", JsonConvert.SerializeObject(content));
+            return post_request("folder", JsonConvert.SerializeObject(data));
         }
-        public dynamic delete_folder(int id)
+
+        /*
+            Delete a specific folder information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of folder to be deleted [Mandatory]
+        */
+        public dynamic delete_folder(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            return delete_request("folder/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return delete_request("folder/" + id, "");
         }
-        public dynamic update_folder(int id, string name)
+
+        /*
+            Update an existing folder.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of folder to be modified [Mandatory]
+            @options data {String} name: Desired name of the folder to be modified [Mandatory]
+        */
+        public dynamic update_folder(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.name = name;
-            return put_request("folder/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("folder/" + id, JsonConvert.SerializeObject(data));
         }
-        public dynamic delete_bounces(string start_date, string end_date, string email)
+
+        /*
+            Delete any hardbounce, which actually would have been blocked due to some temporary ISP failures.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} start_date: The start date to get report from. Date must be in YYYY-MM-DD format and should be before the end_date [Optional]
+            @options data {String} end_date: The end date to get report till date. Date must be in YYYY-MM-DD format and should be after the start_date [Optional]
+            @options data {String} email: Email address to delete its bounces [Optional]
+        */
+        public dynamic delete_bounces(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.start_date = start_date; content.end_date = end_date; content.email = email;
-            return post_request("bounces", JsonConvert.SerializeObject(content));
+            return post_request("bounces", JsonConvert.SerializeObject(data));
         }
-        public dynamic send_transactional_template(int id, string to, string cc, string bcc, Dictionary<string, string> attr, string attachmentUrl, Dictionary<string, string> attachment)
+
+        /*
+            Send templates created on SendinBlue, through SendinBlue SMTP (transactional mails).
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of the template created on SendinBlue account [Mandatory]
+            @options data {String} to: Email address of the recipient(s). You can use pipe ( | ) to separate multiple recipients. Example: "to-example@example.net|to2-example@example.net" [Mandatory]
+            @options data {String} cc: Same as to but for Cc [Optional]
+            @options data {String} bcc: Same as to but for Bcc [Optional]
+            @options data {Array} attr: The name of attribute present in your SendinBlue account. It should be sent as an associative array. Example: array("NAME"=>"name"). You can use commas to separate multiple attributes [Optional]
+            @options data {String} attachment_url: Provide the absolute url of the attachment. Url not allowed from local machine. File must be hosted somewhere [Optional]
+            @options data {Array} attachment: To send attachment/s generated on the fly you have to pass your attachment/s filename & its base64 encoded chunk data as an associative array [Optional]
+            @options data {Array} headers: The headers will be sent along with the mail headers in original email. Example: array("Content-Type"=>"text/html; charset=iso-8859-1"). You can use commas to separate multiple headers [Optional]
+        */
+        public dynamic send_transactional_template(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.to = to; content.cc = cc; content.bcc = bcc; content.attr = attr; content.attachment_url = attachmentUrl; content.attachment = attachment;
-            return put_request("template/" + id, JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("template/" + id, JsonConvert.SerializeObject(data));
         }
-        public dynamic share_campaign(List<int> campaignids)
+
+        /*
+            Create your Senders.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} name: Name of the sender [Mandatory]
+            @options data {String} email: Email address of the sender [Mandatory]
+            @options data {Array} ip_domain: Pass pipe ( | ) separated Dedicated IP and its associated Domain. Example: "1.2.3.4|mydomain.com". You can use commas to separate multiple ip_domain’s [Mandatory: Only for Dedicated IP clients, for Shared IP clients, it should be kept blank]
+        */
+        public dynamic create_sender(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.camp_ids = campaignids;
-            return post_request("campaign/sharelinkv2", JsonConvert.SerializeObject(content));
+            return post_request("advanced", JsonConvert.SerializeObject(data));
         }
-        public dynamic get_reseller_child(Dictionary<string, string> child_authkey)
+        
+        /*
+            Delete your Sender Information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of sender to be deleted [Mandatory]
+        */
+        public dynamic delete_sender(Dictionary<string, int> data)
         {
-            dynamic content = new ExpandoObject();
-            content.auth_key = JsonConvert.SerializeObject(child_authkey);
-            return post_request("account/getchildv2", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return delete_request("advanced/" + id, "");
         }
-        public dynamic add_remove_child_credits(String child_authkey, Dictionary<string, int> add_credits, Dictionary<string, int> remove_credits)
+
+        /*
+            Update your Senders.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of sender to be modified [Mandatory]
+            @options data {String} name: Name of the sender [Mandatory]
+            @options data {Array} ip_domain: Pass pipe ( | ) separated Dedicated IP and its associated Domain. Example: "1.2.3.4|mydomain.com". You can use commas to separate multiple ip_domain’s [Mandatory: Only for Dedicated IP clients, for Shared IP clients, it should be kept blank]
+        */
+        public dynamic update_sender(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.auth_key = child_authkey;
-            content.add_credit = add_credits;
-            content.rmv_credit = remove_credits;
-            return post_request("account/addrmvcredit", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("advanced/" + id, JsonConvert.SerializeObject(data));
         }
-        public dynamic update_child_account(string child_authkey, string company_org, string First_name, string Last_name, string password, List<string> associate_ip, List<string> disassociate_ip)
+
+        /*
+            Get Access of created senders information.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} option: Options to get senders. Possible options – IP-wise, & Domain-wise ( only for dedicated IP clients ). Example: to get senders with specific IP, use $option=’1.2.3.4′, to get senders with specific domain use, $option=’domain.com’, & to get all senders, use $option="" [Optional]
+        */
+        public dynamic get_senders(Dictionary<string, string> data)
         {
-            dynamic content = new ExpandoObject();
-            content.auth_key = child_authkey;
-            content.company_org = company_org;
-            content.first_name = First_name;
-            content.last_name = Last_name;
-            content.password = password;
-            content.associate_ip = associate_ip;
-            content.disassociate_ip = disassociate_ip;
-            return put_request("account", JsonConvert.SerializeObject(content));
+            string option = data["option"];
+            return get_request("advanced/index/option/" + option, "");
         }
-        public dynamic delete_child_account(string child_authkey)
+
+
+        /*
+            Send a Test SMS.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of the SMS campaign [Mandatory]
+            @options data {String} to: Mobile number with the country code to send test SMS. The mobile number defined here should belong to one of your contacts in SendinBlue account and should not be blacklisted [Mandatory]
+        */
+        public dynamic send_bat_sms(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            return delete_request("account/" + child_authkey, JsonConvert.SerializeObject(content));
-        }
-        public dynamic create_child_account(string email, string password, string company_org, string First_name, string Last_name, Dictionary<string, int> credits, List<string> associate_ip)
-        {
-            dynamic content = new ExpandoObject();
-            content.child_email = email;
-            content.password = password;
-            content.company_org = company_org;
-            content.first_name = First_name;
-            content.last_name = Last_name;
-            content.credits = credits;
-            content.associate_ip = associate_ip;
-            return post_request("account", JsonConvert.SerializeObject(content));
-        }
-        public dynamic create_sender(string sender_name, string sender_email, List<string> ip_domain)
-        {
-            dynamic content = new ExpandoObject();
-            content.name = sender_name;
-            content.email = sender_email;
-            content.ip_domain = ip_domain;
-            return post_request("advanced", JsonConvert.SerializeObject(content));
-        }
-        public dynamic delete_sender(int id)
-        {
-            dynamic content = new ExpandoObject();
-            return delete_request("advanced/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic update_sender(int id, string sender_name, string sender_email, List<string> ip_domain)
-        {
-            dynamic content = new ExpandoObject();
-            content.name = sender_name;
-            content.email = sender_email;
-            content.ip_domain = ip_domain;
-            return put_request("advanced/" + id, JsonConvert.SerializeObject(content));
-        }
-        public dynamic get_senders(string option)
-        {
-            dynamic content = new ExpandoObject();
-            return get_request("advanced/index/option/" + option, JsonConvert.SerializeObject(content));
-        }
-        public dynamic send_bat_email(int id, List<string> email_to)
-        {
-            dynamic content = new ExpandoObject();
-            content.emails = email_to;
-            return put_request("campaign/" + id + "/test", JsonConvert.SerializeObject(content));
-        }
-        public dynamic send_bat_sms(int id, string mobilephone)
-        {
-            dynamic content = new ExpandoObject();
-            content.to = mobilephone;
+            string id = data["id"].ToString();
+            string mobilephone = data["to"].ToString();
             String phone = HttpUtility.UrlEncode(mobilephone);
             return get_request("sms/" + id + "/" + phone, "");
 
         }
-        public dynamic create_sms_campaign(string camp_name, string sender, string content, string bat_sent, List<int> listids, List<int> exclude_list, string scheduled_date, int send_now)
+
+        /*
+            Send a transactional SMS.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} to: The mobile number to send SMS to with country code [Mandatory]
+            @options data {String} from: The name of the sender. The number of characters is limited to 11 (alphanumeric format) [Mandatory]
+            @options data {String} text: The text of the message. The maximum characters used per SMS is 160, if used more than that, it will be counted as more than one SMS [Mandatory]
+            @options data {String} web_url: The web URL that can be called once the message is successfully delivered [Optional]
+            @options data {String} tag: The tag that you can associate with the message [Optional]
+            @options data {String} type: Type of message. Possible values – marketing (default) & transactional. You can use marketing for sending marketing SMS, & for sending transactional SMS, use transactional type [Optional]
+        */
+        public dynamic send_sms(Object data)
         {
-            dynamic body = new ExpandoObject();
-            body.name = camp_name; body.sender = sender; body.content = content; body.bat = bat_sent; body.listid = listids; body.exclude_list = exclude_list; body.scheduled_date = scheduled_date; body.send_now = send_now;
-            return post_request("sms", JsonConvert.SerializeObject(body));
+            return post_request("sms", JsonConvert.SerializeObject(data));
         }
-        public dynamic update_sms_campaign(int id, string camp_name, string sender, string content, string bat_sent, List<int> listids, List<int> exclude_list, string scheduled_date, int send_now)
+
+        /*
+            Create & Schedule your SMS campaigns.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} name: Name of the SMS campaign [Mandatory]
+            @options data {String} sender: This allows you to customize the SMS sender. The number of characters is limited to 11 ( alphanumeric format ) [Optional]
+            @options data {String} content: Content of the message. The maximum characters used per SMS is 160, if used more than that, it will be counted as more than one SMS [Optional]
+            @options data {String} bat: Mobile number with the country code to send test SMS. The mobile number defined here should belong to one of your contacts in SendinBlue account and should not be blacklisted [Optional]
+            @options data {Array} listid: These are the list ids to which the SMS campaign is sent [Mandatory: if scheduled_date is not empty]
+            @options data {Array} exclude_list: These are the list ids which will be excluded from the SMS campaign [Optional]
+            @options data {String} scheduled_date: The day on which the SMS campaign is supposed to run [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic create_sms_campaign(Object data)
         {
-            dynamic body = new ExpandoObject();
-            body.name = camp_name; body.sender = sender; body.content = content; body.bat = bat_sent; body.listid = listids; body.exclude_list = exclude_list; body.scheduled_date = scheduled_date; body.send_now = send_now;
-            return put_request("sms/" + id, JsonConvert.SerializeObject(body));
+            return post_request("sms", JsonConvert.SerializeObject(data));
         }
-        public dynamic create_trigger_campaign(string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring, string attachmentUrl, int inline_image, int send_now)
+
+        /*
+            Update your SMS campaigns.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of the SMS campaign [Mandatory]
+            @options data {String} name: Name of the SMS campaign [Optional]
+            @options data {String} sender: This allows you to customize the SMS sender. The number of characters is limited to 11 ( alphanumeric format ) [Optional]
+            @options data {String} content: Content of the message. The maximum characters used per SMS is 160, if used more than that, it will be counted as more than one SMS [Optional]
+            @options data {String} bat: Mobile number with the country code to send test SMS. The mobile number defined here should belong to one of your contacts in SendinBlue account and should not be blacklisted [Optional]
+            @options data {Array} listid: hese are the list ids to which the SMS campaign is sent [Mandatory: if scheduled_date is not empty]
+            @options data {Array} exclude_list: These are the list ids which will be excluded from the SMS campaign [Optional]
+            @options data {String} scheduled_date: The day on which the SMS campaign is supposed to run [Optional]
+            @options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
+        */
+        public dynamic update_sms_campaign(Dictionary<string, Object> data)
         {
-            dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring; content.attachment_url = attachmentUrl; content.inline_image = inline_image; content.send_now = send_now;
-            return post_request("campaign", JsonConvert.SerializeObject(content));
+            string id = data["id"].ToString();
+            return put_request("sms/" + id, JsonConvert.SerializeObject(data));
         }
-        public dynamic update_trigger_campaign(int id, string category, string from_name, string name, string bat_sent, string html_content, string html_url, List<int> listid, string scheduled_date, string subject, string from_email, string reply_to, string to_field, List<int> exclude_list, int recurring, string attachmentUrl, int inline_image, int send_now)
+
+        /*
+            Create a Template.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients & for Shared IP clients, if sender exists]
+            @options data {String} template_name: Name of the Template [Mandatory]
+            @options data {String} bat: Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Mandatory: if html_url is empty]
+            @options data {String} html_url Url: which content is the body of content [Mandatory: if html_content is empty]
+            @options data {String} subject: Subject of the campaign [Mandatory]
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_fieldv This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM]. To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Integer} status: Status of template. Possible values = 0 (default) & 1. status = 0 means template is inactive, & status = 1 means template is active [Optional]
+            @options data {Integer} attachment: Status of attachment. Possible values = 0 (default) & 1. attach = 0 means an attachment can’t be sent, & attach = 1 means an attachment can be sent, in the email [Optional]
+        */
+        public dynamic create_template(Object data)
         {
-            dynamic content = new ExpandoObject();
-            content.category = category; content.from_name = from_name; content.trigger_name = name; content.bat_sent = bat_sent; content.html_content = html_content; content.html_url = html_url; content.listid = listid; content.scheduled_date = scheduled_date; content.subject = subject; content.from_email = from_email; content.reply_to = reply_to; content.to_field = to_field; content.exclude_list = exclude_list; content.recurring = recurring; content.attachment_url = attachmentUrl; content.inline_image = inline_image; content.send_now = send_now;
-            return put_request("campaign/" + id, JsonConvert.SerializeObject(content));
+            return post_request("template", JsonConvert.SerializeObject(data));
         }
-        public dynamic create_template(string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach)
+
+        /*
+            Update a Template.
+            @param {Object} data contains dynamic object with a collection of keys and values from Dictionary.
+            @options data {Integer} id: Id of Template to be modified [Mandatory]
+            @options data {String} from_name: Sender name from which the campaign emails are sent [Mandatory: for Dedicated IP clients & for Shared IP clients, if sender exists]
+            @options data {String} template_name: Name of the Template [Mandatory]
+            @options data {String} bat: Email address for test mail [Optional]
+            @options data {String} html_content: Body of the content. The HTML content field must have more than 10 characters [Mandatory: if html_url is empty]
+            @options data {String} html_url: Url which content is the body of content [Mandatory: if html_content is empty]
+            @options data {String} subject: Subject of the campaign [Mandatory]
+            @options data {String} from_email: Sender email from which the campaign emails are sent [Mandatory: for Dedicated IP clients & for Shared IP clients, if sender exists]
+            @options data {String} reply_to: The reply to email in the campaign emails [Optional]
+            @options data {String} to_field: This is to personalize the «To» Field. If you want to include the first name and last name of your recipient, add [PRENOM] [NOM]. To use the contact attributes here, these should already exist in SendinBlue account [Optional]
+            @options data {Integer} status: Status of template. Possible values = 0 (default) & 1. status = 0 means template is inactive, & status = 1 means template is active [Optional]
+            @options data {Integer} attachment: Status of attachment. Possible values = 0 (default) & 1. attach = 0 means an attachment can’t be sent, & attach = 1 means an attachment can be sent, in the email [Optional]
+        */
+        public dynamic update_template(Dictionary<string, Object> data)
         {
-            dynamic body = new ExpandoObject();
-            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status; body.attachment = attach;
-            return post_request("template", JsonConvert.SerializeObject(body));
-        }
-        public dynamic update_template(int id, string from_name, string name, string bat_sent, string html_content, string html_url, string subject, string from_email, string reply_to, string to_field, int status, int attach)
-        {
-            dynamic body = new ExpandoObject();
-            body.from_name = from_name; body.template_name = name; body.bat = bat_sent; body.html_content = html_content; body.html_url = html_url; body.subject = subject; body.from_email = from_email; body.reply_to = reply_to; body.to_field = to_field; body.status = status; body.attachment = attach;
-            return post_request("template/" + id, JsonConvert.SerializeObject(body));
-        }
-        public dynamic update_campaign_status(int id, string status)
-        {
-            dynamic content = new ExpandoObject();
-            content.status = status;
-            return put_request("campaign/" + id + "/updatecampstatus", JsonConvert.SerializeObject(content));
-        }
-        public dynamic get_smtp_details()
-        {
-            dynamic content = new ExpandoObject();
-            return get_request("account/smtpdetail", JsonConvert.SerializeObject(content));
-        }
+            string id = data["id"].ToString();
+            return post_request("template/" + id, JsonConvert.SerializeObject(data));
+        }    
 
     }
 
