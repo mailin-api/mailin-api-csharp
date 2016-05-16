@@ -14,10 +14,17 @@ namespace mailinblue
     {
         public string base_url = "https://api.sendinblue.com/v2.0/";
         public string accessId = "";
+        public int timeout;
 
         public API(string accessId)
         {
             this.accessId = accessId;
+            this.timeout = 30000; //default timeout: 30 secs
+        }
+        public API(string accessId, int timeout)
+        {
+            this.accessId = accessId;
+            this.timeout = timeout;
         }
         private dynamic auth_call(string resource, string method, string content)
         {
@@ -27,9 +34,21 @@ namespace mailinblue
             // Create request
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            try
+            {
+                if (timeout != null && (timeout <= 0 || timeout > 60000)) {
+                    throw new Exception("value not allowed for timeout");
+                } 
+            }
+            catch (System.Net.WebException ex)
+            {
+                stream = ex.Response.GetResponseStream() as Stream;
+            }
+
             // Set method
             request.Method = method;
             request.ContentType = content_type;
+            request.Timeout = timeout;
             request.Headers.Add("api-key", accessId);
 
             if (method == "POST" || method == "PUT")
