@@ -68,6 +68,9 @@ namespace mailinblue
             }
             catch (System.Net.WebException ex)
             {
+                if(ex.Response == null){
+                    throw new Exception("Request failed");
+                }
                 // read the response stream If status code is other than 200 and put it into a byte array
                 stream = ex.Response.GetResponseStream() as Stream;
             }
@@ -83,6 +86,10 @@ namespace mailinblue
             // convert read bytes into string
             ASCIIEncoding encoding = new ASCIIEncoding();
             String responseString = encoding.GetString(ms.ToArray());
+            if (responseString == "")
+            {
+                throw new Exception("Unable to read response");
+            }
             return JObject.Parse(responseString);
         }
         private dynamic get_request(string resource, string content)
